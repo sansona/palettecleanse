@@ -65,7 +65,7 @@ class CMap:
         pixels = image_array.reshape((-1, 3))
 
         # Use KMeans clustering to find dominant colors
-        kmeans = KMeans(n_clusters=self.n_colors)
+        kmeans = KMeans(n_clusters=self.n_colors, n_init=10)
         kmeans.fit(pixels)
 
         # Get the cluster centers (dominant colors)
