@@ -22,7 +22,7 @@ class CMap:
         Args:
             image_fname (str): filename to image
             cmap_type (str): type of colormap. Options are:
-                ['sequential, 'diverging', 'cyclic', 'converging', qualitative']
+                ['sequential, 'diverging', 'cyclic', 'qualitative']
                 Default to 'sequential'
             n_colors (int): number of colors to cluster in clustering algorithm. Default to 5
 
@@ -38,14 +38,18 @@ class CMap:
 
     def load_image(self) -> Image:
         """
-        Load the image using PIL and convert to RGB.
+        Load the image, convert to RGB, and compress image.
+        Compression primarily helps with clustering later on - large image
+            files will still have a delay
 
         Args:
             (None)
         Returns:
             (Image)
         """
-        return Image.open(self.image_fname).convert("RGB")
+        img = Image.open(self.image_fname).convert("RGB")
+        img = img.resize((100, 100))
+        return img
 
     def extract_colors(self) -> list:
         """
@@ -57,7 +61,7 @@ class CMap:
             (np.array): array of normalized extracted colors
         """
         image_array = np.array(self.image)
-        # Reshape image array to 2D (n_pixels, 3) where 3 is for RGB
+        # Reshape image array to 2D (n_pixels, 3) where 3 == RGB channels
         pixels = image_array.reshape((-1, 3))
 
         # Use KMeans clustering to find dominant colors
@@ -66,7 +70,7 @@ class CMap:
 
         # Get the cluster centers (dominant colors)
         colors = kmeans.cluster_centers_
-        # Normalize to [0, 1] range for compatibility with matplotlib colormaps
+        # Normalize to [0, 1] range
         colors = colors / 255.0
 
         return colors
@@ -80,17 +84,26 @@ class CMap:
         Returns:
             (mcolors.ColorMap)
         """
+        # since each cmap type modifies, instantiate within function itself
+        colors = self.colors
 
         if self.cmap_type == "sequential":
+
+            # sort RGB array by sorting on least significant to most significant
+            # https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column/38194077#38194077
+            colors = colors[colors[:,2].argsort()]
+            colors = colors[colors[:,1].argsort(kind='mergesort')]
+            colors = colors[colors[:,0].argsort(kind='mergesort')]
+
             return mcolors.LinearSegmentedColormap.from_list(
-                "sequential", self.colors, N=256
+                "sequential", colors, N=256
             )
 
         elif self.cmap_type == "diverging":
             if len(self.colors) >= 2:
-                midpoint = len(self.colors) // 2
+                midpoint = len(colors) // 2
                 diverging_colors = np.vstack(
-                    (self.colors[0], self.colors[midpoint:], self.colors[-1])
+                    (colors[0], colors[midpoint:], colors[-1])
                 )
                 return mcolors.LinearSegmentedColormap.from_list(
                     "diverging", diverging_colors, N=256
@@ -102,30 +115,11 @@ class CMap:
 
         elif self.cmap_type == "cyclic":
             cyclic_colors = np.vstack(
-                (self.colors, self.colors[0])
+                (colors, colors[0])
             )  # Repeat the first color at the end
             return mcolors.LinearSegmentedColormap.from_list(
                 "cyclic", cyclic_colors, N=256
             )
-
-        elif self.cmap_type == "converging":
-            # Assuming converging goes towards a specific central color
-            if len(self.colors) >= 2:
-                midpoint = len(self.colors) // 2
-                converging_colors = np.vstack(
-                    (
-                        self.colors[:midpoint],
-                        np.mean(self.colors, axis=0),
-                        self.colors[midpoint:],
-                    )
-                )
-                return mcolors.LinearSegmentedColormap.from_list(
-                    "converging", converging_colors, N=256
-                )
-            else:
-                raise ValueError(
-                    "Image must contain at least two colors for converging colormap"
-                )
 
         elif self.cmap_type == "qualitative":
             return mcolors.ListedColormap(self.colors, name="qualitative")
@@ -142,8 +136,10 @@ class CMap:
         Returns:
             (None)
         """
+        # create empty template
         gradient = np.linspace(0, 1, 256)
         gradient = np.vstack((gradient, gradient))
+
         plt.figure(figsize=(12, 2))
         plt.imshow(gradient, aspect="auto", cmap=self.cmap)
         plt.axis("off")
@@ -158,7 +154,7 @@ class CMap:
         Returns:
             (None)
         """
-        cmap_types = ["sequential", "diverging", "cyclic", "converging", "qualitative"]
+        cmap_types = ["sequential", "diverging", "cyclic", "qualitative"]
         n_cmaps = len(cmap_types)
 
         # Create subplots: one for the image, others for colormaps
@@ -176,7 +172,7 @@ class CMap:
         # Iterate over each colormap type and display it
         for ax, cmap_type in zip(axes[1:], cmap_types):
             self.cmap_type = cmap_type
-            self.cmap = self.generate_cmap()  # Generate the corresponding colormap
+            self.cmap = self.generate_cmap()
 
             ax.imshow(gradient, aspect="auto", cmap=self.cmap)
             ax.set_title(f"{cmap_type.capitalize()}")
@@ -184,14 +180,3 @@ class CMap:
 
         plt.tight_layout()
         plt.show()
-
-    def get_cmap(self):
-        """
-        Return the generated colormap for use in plotting
-
-        Args:
-            (None)
-        Returns:
-            (mcolors.ColorMap)
-        """
-        return self.cmap
