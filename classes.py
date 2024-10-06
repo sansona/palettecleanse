@@ -51,7 +51,7 @@ class CMap:
         img = img.resize((100, 100))
         return img
 
-    def extract_colors(self) -> list:
+    def extract_colors(self) -> np.ndarray:
         """
         Extract the `n_colors` dominant colors using KMeans clustering
 
