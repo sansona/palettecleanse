@@ -1,10 +1,11 @@
 """
 Collection of CMap objects
 """
-from PIL import Image
-import numpy as np
+
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+import numpy as np
+from PIL import Image
 from sklearn.cluster import KMeans
 
 
@@ -15,7 +16,7 @@ class CMap:
 
     def __init__(
         self, image_fname: str, cmap_type: str = "sequential", n_colors: int = 5
-    ):
+    ) -> None:
         """
         Initialize the CMap object with an image, colormap type, and number of colors
 
@@ -75,7 +76,7 @@ class CMap:
 
         return colors
 
-    def generate_cmap(self):
+    def generate_cmap(self) -> None:
         """
         Generates a colormap based on the extracted colors from clustering and specified cmap_type
 
@@ -88,12 +89,11 @@ class CMap:
         colors = self.colors
 
         if self.cmap_type == "sequential":
-
             # sort RGB array by sorting on least significant to most significant
             # https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column/38194077#38194077
-            colors = colors[colors[:,2].argsort()]
-            colors = colors[colors[:,1].argsort(kind='mergesort')]
-            colors = colors[colors[:,0].argsort(kind='mergesort')]
+            colors = colors[colors[:, 2].argsort()]
+            colors = colors[colors[:, 1].argsort(kind="mergesort")]
+            colors = colors[colors[:, 0].argsort(kind="mergesort")]
 
             return mcolors.LinearSegmentedColormap.from_list(
                 "sequential", colors, N=256
@@ -102,9 +102,7 @@ class CMap:
         elif self.cmap_type == "diverging":
             if len(self.colors) >= 2:
                 midpoint = len(colors) // 2
-                diverging_colors = np.vstack(
-                    (colors[0], colors[midpoint:], colors[-1])
-                )
+                diverging_colors = np.vstack((colors[0], colors[midpoint:], colors[-1]))
                 return mcolors.LinearSegmentedColormap.from_list(
                     "diverging", diverging_colors, N=256
                 )
@@ -127,7 +125,7 @@ class CMap:
         else:
             raise ValueError(f"Colormap type '{self.cmap_type}' not implemented")
 
-    def display_cmap(self):
+    def display_cmap(self) -> None:
         """
         Displays a colorbar of the cmap. Note that cmap will be shaded according to a gradient
 
@@ -143,9 +141,8 @@ class CMap:
         plt.figure(figsize=(12, 2))
         plt.imshow(gradient, aspect="auto", cmap=self.cmap)
         plt.axis("off")
-        plt.show()
 
-    def display_all_cmaps(self):
+    def display_all_cmaps(self) -> None:
         """
         Displays all possible colormap options alongside original image
 
@@ -179,4 +176,3 @@ class CMap:
             ax.axis("off")
 
         plt.tight_layout()
-        plt.show()
