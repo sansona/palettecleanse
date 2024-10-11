@@ -1,2 +1,2 @@
-# snaptocmap
-python library for converting images to colormaps
+# palettecleanser
+ `palettecleanser` is a python library for converting images to custom color maps 

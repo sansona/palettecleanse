@@ -1,4 +1,4 @@
-"""Test suite for functions in snaptocmap"""
+"""Test suite for functions in palettecleanser"""
 
 import sys
 
