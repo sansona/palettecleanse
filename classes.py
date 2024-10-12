@@ -5,6 +5,8 @@ Collection of CMap objects
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+from lifelines import KaplanMeierFitter
 from PIL import Image
 from sklearn.cluster import KMeans
 
@@ -144,7 +146,7 @@ class CMap:
 
     def display_all_cmaps(self) -> None:
         """
-        Displays all possible colormap options 
+        Displays all possible colormap options
 
         Args:
             (None)
@@ -156,7 +158,6 @@ class CMap:
 
         # Create subplots: one for the image, others for colormaps
         _, axes = plt.subplots(n_cmaps, 1, figsize=(6, 3))
-
 
         # Generate the gradient for colormap display
         gradient = np.linspace(0, 1, 256)
@@ -208,3 +209,90 @@ class CMap:
 
         plt.tight_layout()
 
+    def display_example_plots(self) -> None:
+        """
+        Applies colormap to selection of preprogrammed plots for ease of data
+        visualization. Note only matplotlib & seaborn plots generated due to
+        difference in plotly subplot interactions
+
+        Args:
+            (None)
+        Returns:
+            (None)
+        """
+        # generate plot dimensions, load image
+        fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(20,6))
+        colors = self.cmap(np.linspace(0, 1, 5))
+
+        axes[0, 0].imshow(plt.imread(self.image_fname))
+        axes[0, 0].set_title('Image')
+
+        # generate scatter plot - sequential colormap
+        s = axes[0, 1].scatter(np.random.rand(100),
+                                np.random.rand(100),
+                                c=range(10,1010,10),
+                                cmap=self.cmap)
+        axes[0, 1].set_title('Scatter Plot')
+        fig.colorbar(s, ax=axes[0, 1])
+
+        # generate bar plot - discete colormap
+        axes[0, 2].barh(['cat', 'dog', 'fish', 'owl', 'whale'],
+                        [15, 30, 45, 60, 20],
+                        color=colors)
+        axes[0, 2].set_title(f'Pareto Plot')
+
+        # generate stackplot - discrete colormap
+        x = list(range(10))
+        values = [sorted(np.random.rand(10)) for i in range(5)]
+        y = dict(zip(x, values))
+        axes[0, 3].stackplot(x, y.values(), alpha=0.8, colors=colors)
+        axes[0, 3].set_title('Stack Plot')
+
+        # generate Kaplan-Meier plot - discrete colormap
+        n = 100
+        populations = 5
+        T = [np.random.exponential(20*i, n) for i in range(populations)]
+        E = [np.random.binomial(1, 0.15, n) for _ in range(populations)]
+        kmf = KaplanMeierFitter()
+
+        for i in range(populations):
+            kmf.fit(T[i], E[i])
+            kmf.plot_survival_function(ax=axes[1, 0], color=colors[i], alpha=0.8)
+        axes[1, 0].legend().remove()
+        axes[1, 0].set_title('Survival Plot')
+
+        # generate violin plot - discrete colormap
+        violin_data = [np.random.normal(5, 1.5, 100),
+                np.random.normal(0, 1, 100),
+                np.random.normal(10, 2, 100),
+                np.random.normal(3, 5, 100)]
+        p = axes[1, 1].violinplot(violin_data, showmedians=False, showmeans=False)
+
+        for i, pc in enumerate(p['bodies']):
+            pc.set_facecolor(colors[i])
+            pc.set_edgecolor(colors[0])
+            pc.set_alpha(0.8)
+            # set extrema bars to be last indexed color in cmap
+            for partname in ('cbars', 'cmins', 'cmaxes'):
+                p[partname].set_color(colors[-1])
+        axes[1, 1].set_title('Violin Plot')
+
+        # generate kde charts - discrete colormap
+        kde_data = [np.random.normal(size=100, loc=10, scale=2),
+                    np.random.normal(size=50, loc=70, scale=4),
+                    np.random.normal(size=200, loc=20, scale=8),
+                    np.random.normal(size=70, loc=0, scale=3)]
+        for i in range(len(kde_data)):
+            axes[1, 2].hist(kde_data[i], density=True, color=colors[i], bins=50)
+        axes[1, 2].set_title('Histogram Plot')
+
+        axes[1, 3] = sns.heatmap(sns.load_dataset("glue").pivot(index="Model", columns="Task", values="Score"), linewidth=0.5,annot=True, cmap=self.cmap)
+        axes[1, 3].set_title('Heat Map')
+
+        # Turn off all labels
+        for i, ax in enumerate(axes.flatten()):
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+            ax.set_xlabel('')
+            ax.set_ylabel('')
+            ax.grid(False)
