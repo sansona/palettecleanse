@@ -144,6 +144,37 @@ class CMap:
 
     def display_all_cmaps(self) -> None:
         """
+        Displays all possible colormap options 
+
+        Args:
+            (None)
+        Returns:
+            (None)
+        """
+        cmap_types = ["sequential", "diverging", "cyclic", "qualitative"]
+        n_cmaps = len(cmap_types)
+
+        # Create subplots: one for the image, others for colormaps
+        _, axes = plt.subplots(n_cmaps, 1, figsize=(6, 3))
+
+
+        # Generate the gradient for colormap display
+        gradient = np.linspace(0, 1, 256)
+        gradient = np.vstack((gradient, gradient))
+
+        # Iterate over each colormap type and display it
+        for ax, cmap_type in zip(axes, cmap_types):
+            self.cmap_type = cmap_type
+            self.cmap = self.generate_cmap()
+
+            ax.imshow(gradient, aspect="auto", cmap=self.cmap)
+            ax.set_title(f"{cmap_type.capitalize()}")
+            ax.axis("off")
+
+        plt.tight_layout()
+
+    def display_all_cmaps_with_image(self) -> None:
+        """
         Displays all possible colormap options alongside original image
 
         Args:
@@ -176,3 +207,4 @@ class CMap:
             ax.axis("off")
 
         plt.tight_layout()
+

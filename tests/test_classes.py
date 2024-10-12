@@ -75,6 +75,7 @@ def test_cmap_display(cmap):
     """Tests that cmap display functions display cmaps"""
     cmap.display_cmap()
     cmap.display_all_cmaps()
+    cmap.display_all_cmaps_with_image()
 
 
 def test_cmap_image_extension_sensitivity():
