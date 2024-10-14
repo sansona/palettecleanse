@@ -34,7 +34,7 @@ def convert_to_cmap(
         return cmap.cmap
     elif library == "seaborn":
         # seaborn color palettes are effectively raw lists
-        return list(cmap.colors)
+        return sort_rgb_by_hsv(list(cmap.colors))
     elif library == "plotly":
         # convert to list of hex values for plotly
         return convert_rgb_cmap_to_hex(list(cmap.colors))

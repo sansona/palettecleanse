@@ -38,6 +38,7 @@ class CMap:
         self.image = self.load_image()
         self.colors = self.extract_colors()
         self.cmap = self.generate_cmap()
+        self.qualitative_cmap = self.generate_qualitative_cmap()
 
     def load_image(self) -> Image:
         """
@@ -75,6 +76,20 @@ class CMap:
         # normalize to [0, 1] range since most plotting libraries use that
         colors = colors / 255.0
 
+        return colors
+
+    def generate_qualitative_cmap(self) -> np.ndarray:
+        """
+        Generates a qualitative colormap with `n_colors`
+
+        Args:
+            (None)
+        Returns:
+            (np.ndarray): a shuffled array of colors spaced within colormap
+        """
+        np.random.seed(42)
+        colors = self.cmap(np.linspace(0, 1, self.n_colors))
+        np.random.shuffle(colors)  # this modifies in line
         return colors
 
     def generate_cmap(self) -> None:
@@ -233,11 +248,6 @@ class CMap:
         Returns:
             (None)
         """
-        # shuffle colors in place to generate a more distinct colormap
-        np.random.seed(42)
-        colors = self.cmap(np.linspace(0, 1, 5))
-        np.random.shuffle(colors)
-
         fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(20, 6))
 
         axes[0, 0].imshow(plt.imread(self.image_fname))
@@ -255,7 +265,9 @@ class CMap:
 
         # generate bar plot - discrete colormap
         axes[0, 2].barh(
-            ["cat", "dog", "fish", "owl", "whale"], [15, 30, 45, 60, 20], color=colors
+            ["cat", "dog", "fish", "owl", "whale"],
+            [15, 30, 45, 60, 20],
+            color=self.qualitative_cmap,
         )
         axes[0, 2].set_title("Pareto Plot")
 
@@ -263,7 +275,7 @@ class CMap:
         x = list(range(10))
         values = [sorted(np.random.rand(10)) for i in range(5)]
         y = dict(zip(x, values))
-        axes[0, 3].stackplot(x, y.values(), alpha=0.8, colors=colors)
+        axes[0, 3].stackplot(x, y.values(), alpha=0.8, colors=self.qualitative_cmap)
         axes[0, 3].set_title("Stack Plot")
 
         # generate Kaplan-Meier plot - discrete colormap
@@ -275,7 +287,9 @@ class CMap:
 
         for i in range(populations):
             kmf.fit(T[i], E[i])
-            kmf.plot_survival_function(ax=axes[1, 0], color=colors[i], alpha=0.8)
+            kmf.plot_survival_function(
+                ax=axes[1, 0], color=self.qualitative_cmap[i], alpha=0.8
+            )
         axes[1, 0].legend().remove()
         axes[1, 0].set_title("Survival Plot")
 
@@ -289,12 +303,12 @@ class CMap:
         p = axes[1, 1].violinplot(violin_data, showmedians=False, showmeans=False)
 
         for i, pc in enumerate(p["bodies"]):
-            pc.set_facecolor(colors[i])
-            pc.set_edgecolor(colors[0])
+            pc.set_facecolor(self.qualitative_cmap[i])
+            pc.set_edgecolor(self.qualitative_cmap[0])
             pc.set_alpha(0.8)
             # set extrema bars to be last indexed color in cmap
             for partname in ("cbars", "cmins", "cmaxes"):
-                p[partname].set_color(colors[-1])
+                p[partname].set_color(self.qualitative_cmap[-1])
         axes[1, 1].set_title("Violin Plot")
 
         # generate kde charts - discrete colormap
@@ -305,7 +319,9 @@ class CMap:
             np.random.normal(size=70, loc=0, scale=3),
         ]
         for i in range(len(kde_data)):
-            axes[1, 2].hist(kde_data[i], density=True, color=colors[i], bins=10)
+            axes[1, 2].hist(
+                kde_data[i], density=True, color=self.qualitative_cmap[i], bins=10
+            )
         axes[1, 2].set_title("Histogram Plot")
 
         # generate heat map
