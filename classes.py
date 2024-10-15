@@ -38,6 +38,10 @@ class CMap:
         self.image = self.load_image()
         self.colors = self.extract_colors()
         self.cmap = self.generate_cmap()
+        self.sequential = self.generate_sequential()
+        self.diverging = self.generate_diverging()
+        self.cyclic = self.generate_cyclic()
+        self.qualitative = self.generate_qualitative_raw()
         self.qualitative_cmap = self.generate_qualitative_cmap()
 
     def load_image(self) -> Image:
@@ -78,9 +82,72 @@ class CMap:
 
         return colors
 
-    def generate_qualitative_cmap(self) -> np.ndarray:
+    def generate_sequential(self) -> mcolors.LinearSegmentedColormap:
         """
-        Generates a qualitative colormap with `n_colors`
+        Generates a sequential colormap
+
+        Args:
+            (None)
+        Returns:
+            (mcolors.LinearSegmentedColormap)
+        """
+        # sort RGB array by sorting on least significant to most significant
+        # https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column/38194077#38194077
+        colors = self.colors[self.colors[:, 2].argsort()]
+        colors = colors[colors[:, 1].argsort(kind="mergesort")]
+        colors = colors[colors[:, 0].argsort(kind="mergesort")]
+
+        return mcolors.LinearSegmentedColormap.from_list(
+            "sequential", colors, N=256
+        )
+
+    def generate_diverging(self) -> mcolors.LinearSegmentedColormap:
+        """
+        Generates a diverging colormap
+
+        Args:
+            (None)
+        Returns:
+            (mcolors.LinearSegmentedColorMap)
+        """
+        # find midpoint of colors and split cmap into less or greater than midpoint
+        if len(self.colors) >= 2:
+            midpoint = len(self.colors) // 2
+            diverging_colors = np.vstack((self.colors[0], self.colors[midpoint:], self.colors[-1]))
+            return mcolors.LinearSegmentedColormap.from_list(
+                "diverging", diverging_colors, N=256
+            )
+        else:
+            raise ValueError(
+                "Image must contain at least two colors for diverging colormap"
+            )
+
+    def generate_cyclic(self) -> mcolors.LinearSegmentedColormap:
+        """
+        Generates a cyclic colormap
+
+        Args:
+            (None)
+        Returns:
+            (mcolors.LinearSegmentedColormap)
+        """
+        # repeat the first color at the end
+        cyclic_colors = np.vstack(
+            (self.colors, self.colors[0])
+        )
+        return mcolors.LinearSegmentedColormap.from_list(
+            "cyclic", cyclic_colors, N=256
+        )
+
+    
+
+    def generate_qualitative_raw(self) -> np.ndarray:
+        """
+        Generates a raw array of colors corresponding to qualitative
+        colormap.
+
+        Some plotting libraries utilize a raw array of colors as opposed
+        to a mcolors object for qualitative colormaps
 
         Args:
             (None)
@@ -91,6 +158,20 @@ class CMap:
         colors = self.cmap(np.linspace(0, 1, self.n_colors))
         np.random.shuffle(colors)  # this modifies in line
         return colors
+
+    def generate_qualitative_cmap(self) -> mcolors.ListedColormap:
+        """
+        Generates a qualitative colormap
+
+        Note - the `generate_qualitative_raw` method is likely preferred
+        for certain plotting libraries
+
+        Args:
+            (None)
+        Returns:
+            (mcolors.ListedColormap): a shuffled array of colors spaced within colormap
+        """
+        return mcolors.ListedColormap(self.colors, name="qualitative")
 
     def generate_cmap(self) -> None:
         """
@@ -267,7 +348,7 @@ class CMap:
         axes[0, 2].barh(
             ["cat", "dog", "fish", "owl", "whale"],
             [15, 30, 45, 60, 20],
-            color=self.qualitative_cmap,
+            color=self.qualitative,
         )
         axes[0, 2].set_title("Pareto Plot")
 
@@ -275,7 +356,7 @@ class CMap:
         x = list(range(10))
         values = [sorted(np.random.rand(10)) for i in range(5)]
         y = dict(zip(x, values))
-        axes[0, 3].stackplot(x, y.values(), alpha=0.8, colors=self.qualitative_cmap)
+        axes[0, 3].stackplot(x, y.values(), alpha=0.8, colors=self.qualitative)
         axes[0, 3].set_title("Stack Plot")
 
         # generate Kaplan-Meier plot - discrete colormap
@@ -288,7 +369,7 @@ class CMap:
         for i in range(populations):
             kmf.fit(T[i], E[i])
             kmf.plot_survival_function(
-                ax=axes[1, 0], color=self.qualitative_cmap[i], alpha=0.8
+                ax=axes[1, 0], color=self.qualitative[i], alpha=0.8
             )
         axes[1, 0].legend().remove()
         axes[1, 0].set_title("Survival Plot")
@@ -303,12 +384,12 @@ class CMap:
         p = axes[1, 1].violinplot(violin_data, showmedians=False, showmeans=False)
 
         for i, pc in enumerate(p["bodies"]):
-            pc.set_facecolor(self.qualitative_cmap[i])
-            pc.set_edgecolor(self.qualitative_cmap[0])
+            pc.set_facecolor(self.qualitative[i])
+            pc.set_edgecolor(self.qualitative[0])
             pc.set_alpha(0.8)
             # set extrema bars to be last indexed color in cmap
             for partname in ("cbars", "cmins", "cmaxes"):
-                p[partname].set_color(self.qualitative_cmap[-1])
+                p[partname].set_color(self.qualitative[-1])
         axes[1, 1].set_title("Violin Plot")
 
         # generate kde charts - discrete colormap
@@ -320,7 +401,7 @@ class CMap:
         ]
         for i in range(len(kde_data)):
             axes[1, 2].hist(
-                kde_data[i], density=True, color=self.qualitative_cmap[i], bins=10
+                kde_data[i], density=True, color=self.qualitative[i], bins=10
             )
         axes[1, 2].set_title("Histogram Plot")
 
