@@ -7,10 +7,10 @@
 (TODO)
 
 ## Quickstart
-To convert an image to a custom color map, simply select an image and load it into `palettecleanser` as a `CMap` object, where desired attributes such as the number of colors can be specified as part of the class initialization. All avaiable colormaps for the image can be displayed via. the `display_all_cmaps` method.
+To convert an image to a custom color map, simply select an image and load it into `palettecleanser` as a `CMap` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available colormaps for the image can be displayed via. the `display_all_cmaps` method.
 ```py
-import palettecleanser as pc
-vangogh = pc.CMap('images/vangogh.jpg')
+from palettecleanser.cmap import CMap
+vangogh = CMap('images/vangogh.jpg')
 vangogh.display_all_cmaps()
 ```
 
@@ -27,18 +27,21 @@ plt.scatter(x, y, c=colors, cmap=vangogh.sequential)
 plt.bar(categories, values, color=vangogh.qualitative)
 
 # qualitative colormap in seaborn
-sns.swarmplot(df, x="x", y="y", hue="z", palette=vg.qualitative)
+sns.swarmplot(df, x="x", y="y", hue="z", palette=vangogh.qualitative)
 
 # generic colormap in plotly
 px.scatter(df, x="x", y="y", color="z", color_continuous_scale=vangogh.plotly)
-
 ```
+To get a sense for how well your colormap works, use the `display_example_plots` method
+```py
+# this creates some misc plots using your generated colormaps
+vangogh.display_example_plots()
+```
+![vangogh_example](images/examples/vangogh_output.png)
+
 See `usage.ipynb` for more examples.
 
 ## Examples
-### Vangogh - Starry Night
-![vangogh_example](images/examples/vangogh_output.png)
-
 ### Hokusai - The Great Wave off Kanagawa
 ![great_wave_example](images/examples/great_wave_output.png)
 
@@ -51,7 +54,8 @@ See `usage.ipynb` for more examples.
 More examples available in `usage.ipynb`.
 
 ## Contributing
-(TODO)
+Contributions at all levels are welcome! I'm happy to discuss with anyone the potential for contributions. Please see CONTRIBUTING.md for some general guidelines and message me with any questions!
+
 ## Meta
 Jiaming Chen –  jiaming.justin.chen@gmail.com
 

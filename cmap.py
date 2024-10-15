@@ -165,6 +165,19 @@ class CMap:
         """
         return mcolors.ListedColormap(self.colors, name="qualitative")
 
+    def plotly_cmap(self) -> list:
+        """
+        Converts colors array to a hex sorted list for plotting in `plotly` library
+
+        Args:
+            (None)
+
+        Returns:
+            list: list containing converted hex colormap
+        """
+
+        return convert_rgb_cmap_to_hex(list(self.colors))
+
     def display_all_cmaps(self) -> None:
         """
         Displays all possible colormap options
@@ -313,19 +326,6 @@ class CMap:
             ax.set_xlabel("")
             ax.set_ylabel("")
             ax.grid(False)
-
-    def plotly_cmap(self) -> list:
-        """
-        Converts colors array to a hex sorted list for plotting in `plotly` library
-
-        Args:
-            (None)
-
-        Returns:
-            list: list containing converted hex colormap
-        """
-
-        return convert_rgb_cmap_to_hex(list(self.colors))
 
 
 def convert_rgb_to_hex(rgb: np.array) -> str:
