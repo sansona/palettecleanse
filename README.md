@@ -14,7 +14,7 @@ vangogh = CMap('images/vangogh.jpg')
 vangogh.display_all_cmaps()
 ```
 
-![vangogh_image](images/vangogh.jpg?raw=true "Starry Night")
+![vangogh_image](images/vangogh_small.png?raw=true "Starry Night")
 
 ![vangogh_cmap](images/examples/vangogh_cmaps.png "Vangogh CMap Examples")
 
@@ -54,7 +54,7 @@ See `usage.ipynb` for more examples.
 More examples available in `usage.ipynb`.
 
 ## Contributing
-Contributions at all levels are welcome! I'm happy to discuss with anyone the potential for contributions. Please see CONTRIBUTING.md for some general guidelines and message me with any questions!
+Contributions at all levels are welcome! I'm happy to discuss with anyone the potential for contributions. Please see `CONTRIBUTING.md` for some general guidelines and message me with any questions!
 
 ## Meta
 Jiaming Chen –  jiaming.justin.chen@gmail.com

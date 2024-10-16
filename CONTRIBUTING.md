@@ -6,6 +6,14 @@ out [to me](mailto:jiaming.justin.chen@gmail.com)! I'm more than willing and ava
 ### Style
 `palettecleanser` utilizes [ruff](https://github.com/astral-sh/ruff) for general formatting and [pep8](https://www.python.org/dev/peps/pep-0008/) for overall style. Simply running the `Format document`, `Format imports` functions in [ruff](https://github.com/astral-sh/ruff) should work.
 
+For any images saved in `palettecleanser`, please run the `compress_image_inplace` function prior to the pull request in order to minimize the size of the overall package. NOTE that this function will modify implace, so please make sure you have backups of your original if needed.
+
+#### Full resolution
+![full_res](images/pink_roses_full_res.jpg)
+#### Compressed via. `compress_image_inplace`
+![compressed](images/pink_roses.jpg)
+
+
 ### Tests
 Each new contribution should have corresponding test coverage. I'd like to retain 100% coverage on ```palettecleanser```. `pytest` is the current testing package.
 

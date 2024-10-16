@@ -383,3 +383,34 @@ def convert_rgb_cmap_to_hex(rgb_cmap: list) -> list:
         hex_cmap.append(convert_rgb_to_hex(c))
 
     return hex_cmap
+
+
+def compress_image_inplace(image_path: str) -> None:
+    """
+    Compresses image in place to reduce package storage.
+    Used for packaging `palettecleanser`
+
+    Args:
+        image_path (str) -> path to image
+    Returns:
+        (None)
+    """
+    compression_size = (500, 500)
+
+    # tiffs and other rarer format compression not supported
+    if image_path.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gip')):
+        img = Image.open(image_path)
+        if img.size <= compression_size:
+            print(
+                f"{image_path} size ({img.size}) less than `compression_limit` ({compression_size}) - no compression applied"
+            )
+        else:
+            initial_size = img.size
+            img = img.resize(compression_size)
+            # note this saves inplace & overwrites the original
+            img.save(image_path, optimize=True, quality=85)
+            print(
+                f"{image_path} compressed - ({initial_size[0]-compression_size[0], initial_size[1]-compression_size[1]}) space saved."
+            )
+    else:
+        print(f"{image_path} file extension not supported.")
