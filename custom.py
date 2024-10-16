@@ -1,31 +1,36 @@
 """
 Collection of predefined color palettes. See `images` folder
 """
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 from palettes import Palette
 
-Vangogh = Palette('images/vangogh.jpg')
-GreatWave = Palette('images/great_wave.jpg')
-PinkRoses = Palette('images/pink_roses.jpg')
-RedRose = Palette('images/red_roses.jpg')
-TwilightSunset = Palette('images/sunset.jpg')
-BladerunnerOlive = Palette('images/bladerunner_olive.jpg')
-Water = Palette('images/water.jpg')
-Candles = Palette('images/candles.jpg')
-NeighborhoodSucculents = Palette('images/neighborhood_succulents.jpg')
-Dance = Palette('images/dance.jpg')
+Vangogh = Palette("images/vangogh.jpg")
+GreatWave = Palette("images/great_wave.jpg")
+PinkRoses = Palette("images/pink_roses.jpg")
+RedRose = Palette("images/red_roses.jpg")
+TwilightSunset = Palette("images/sunset.jpg")
+BladerunnerOlive = Palette("images/bladerunner_olive.jpg")
+Water = Palette("images/water.jpg")
+Candles = Palette("images/candles.jpg")
+NeighborhoodSucculents = Palette("images/neighborhood_succulents.jpg")
+Dance = Palette("images/dance.jpg")
 
-all_customs = {Vangogh: 'Vangogh',
-               GreatWave: 'GreatWave',
-               PinkRoses: 'PinkRoses',
-               RedRose: 'RedRose',
-               TwilightSunset: 'TwilightSunset',
-               BladerunnerOlive: 'BladerunnerOlive',
-               Water: 'Water',
-               Candles: 'Candles',
-               NeighborhoodSucculents: 'NeighborhoodSucculents',
-               Dance: 'Dance'}
+all_customs = {
+    Vangogh: "Vangogh",
+    GreatWave: "GreatWave",
+    PinkRoses: "PinkRoses",
+    RedRose: "RedRose",
+    TwilightSunset: "TwilightSunset",
+    BladerunnerOlive: "BladerunnerOlive",
+    Water: "Water",
+    Candles: "Candles",
+    NeighborhoodSucculents: "NeighborhoodSucculents",
+    Dance: "Dance",
+}
+
 
 def display_all_custom_palettes(palette_type) -> None:
     """
@@ -36,9 +41,9 @@ def display_all_custom_palettes(palette_type) -> None:
     Returns:
         (None)
     """
-    available_types = ['sequential', 'diverging', 'cyclic', 'qualitative']
+    available_types = ["sequential", "diverging", "cyclic", "qualitative"]
     if palette_type not in available_types:
-        return (f"{palette_type} not in [available_types]")
+        return f"{palette_type} not in [available_types]"
 
     # get the corresponding colormap for the type of `palette_type`
     n_customs = len(all_customs.keys())
@@ -55,11 +60,11 @@ def display_all_custom_palettes(palette_type) -> None:
     gradient = np.linspace(0, 1, 256)
     gradient = np.vstack((gradient, gradient))
 
-    fig, axes = plt.subplots(n_customs, 1, figsize=(10, n_customs//1.25))
+    fig, axes = plt.subplots(n_customs, 1, figsize=(10, n_customs // 1.25))
     # iterate over each custom & display
     for ax, palette, name in zip(axes, all_palettes, all_customs.values()):
         ax.imshow(gradient, aspect="auto", cmap=palette)
         ax.set_title(name)
         ax.axis("off")
-    fig.suptitle(f'All {palette_type} palettes')
+    fig.suptitle(f"All {palette_type} palettes")
     plt.tight_layout()

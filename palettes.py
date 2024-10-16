@@ -18,9 +18,7 @@ class Palette:
     Base palette class
     """
 
-    def __init__(
-        self, image_fname: str, n_colors: int = 5
-    ) -> None:
+    def __init__(self, image_fname: str, n_colors: int = 5) -> None:
         """
         Initialize the Palette object with an image, palette type, and number of colors
 
