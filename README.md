@@ -39,6 +39,14 @@ vangogh.display_example_plots()
 ```
 ![vangogh_example](images/examples/vangogh_output.png)
 
+`palettecleanser` also comes prepackaged with some custom colormaps:
+```py
+from palettecleanser import colormaps
+
+colormaps.TwilightSunset.display_all_cmaps()
+```
+![TwilightSunset cmap](images/examples/sunset_cmaps.png)
+
 See `usage.ipynb` for more examples.
 
 ## Examples
