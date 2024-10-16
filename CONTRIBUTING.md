@@ -15,7 +15,7 @@ For any images saved in `palettecleanser`, please run the `compress_image_inplac
 
 ### Custom Palettes
 To add a custom color palette to `palettecleanser`:
-1. Add the image to the `images` folder.
+1. Add the image to the `images` folder. <b>Non-licensed/copyrighted images only.</b>
 2. Compress the image using the `compress_image_inplace` function provided. Note that this modifies the image in place, so please make sure you have backups if needed.
 3. Add a custom palette to `custom.py` as a standalone variable & in the `all_customs` dictionary. Note that the `n_colors` attribute can be evaluated to determine what an appropriate number of color clusters is for your image.
 4. Run the test suite to ensure that your colormap works. It may also be a good idea to explicitly run the `display_all_custom_palettes` method to confirm visually that your palette is included.

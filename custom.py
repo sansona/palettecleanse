@@ -4,6 +4,7 @@ Collection of predefined color palettes. See `images` folder
 
 import matplotlib.pyplot as plt
 import numpy as np
+from tqdm import tqdm
 
 from palettes import Palette
 
@@ -62,7 +63,7 @@ def display_all_custom_palettes(palette_type) -> None:
 
     fig, axes = plt.subplots(n_customs, 1, figsize=(10, n_customs // 1.25))
     # iterate over each custom & display
-    for ax, palette, name in zip(axes, all_palettes, all_customs.values()):
+    for ax, palette, name in tqdm(zip(axes, all_palettes, all_customs.values()), desc=f'Generating {palette_type} displays...', total=n_customs):
         ax.imshow(gradient, aspect="auto", cmap=palette)
         ax.set_title(name)
         ax.axis("off")
