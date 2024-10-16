@@ -4,8 +4,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ---
 ## Installation
-(TODO)
-
+```pip import palettecleanser```
 ## Quickstart
 To convert an image to a custom color palette, simply select an image and load it into `palettecleanser` as a `Palette` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available palettes for the image can be displayed via. the `display_all_palettes` method.
 ```py
