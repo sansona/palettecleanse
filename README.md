@@ -52,6 +52,13 @@ custom.TwilightSunset.display_all_palettes()
 See `usage.ipynb` for more examples.
 
 ## Examples
+All available custom palettes can be accessed via. the `display_all_custom_palettes` method
+```py
+custom.display_all_custom_palettes('sequential')
+```
+![Custom Sequentials](images/examples/custom_sequentials.png)
+
+Below are example plots made using via. the `display_example_plots` method that can be used to get a bird's eye view on how well a palette behaves across generic plot types
 ### Hokusai - The Great Wave off Kanagawa
 ![great_wave_example](images/examples/great_wave_output.png)
 
@@ -60,6 +67,9 @@ See `usage.ipynb` for more examples.
 
 ### Sunset
 ![sunset_example](images/examples/sunset_output.png)
+
+### Bladerunner Olive
+![bladerunner_olive](images/examples/bladerunner_olive_output.png)
 
 More examples available in `usage.ipynb`.
 

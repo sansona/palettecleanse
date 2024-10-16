@@ -1,10 +1,12 @@
 """Test suite for pre-defined palettes"""
 
 import sys
+import os
 
 sys.path.append("..")
-from custom import *
+os.chdir('..')
 
+from custom import *
 
 def test_all_palettes() -> None:
     "Tests that all existing palettes are loaded properly"
