@@ -1,5 +1,5 @@
 # palettecleanser
-`palettecleanser` is a python library for quick conversions of images to custom color maps
+`palettecleanser` is a python library for quick conversions of images to custom color palettes
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 ---
@@ -7,45 +7,47 @@
 (TODO)
 
 ## Quickstart
-To convert an image to a custom color map, simply select an image and load it into `palettecleanser` as a `CMap` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available colormaps for the image can be displayed via. the `display_all_cmaps` method.
+To convert an image to a custom color palette, simply select an image and load it into `palettecleanser` as a `Palette` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available palettes for the image can be displayed via. the `display_all_palettes` method.
 ```py
-from palettecleanser.cmap import CMap
-vangogh = CMap('images/vangogh.jpg')
-vangogh.display_all_cmaps()
+from palettecleanser.palettes import Palette
+
+# load image
+vangogh = Palette('images/vangogh.jpg')
+vangogh.display_all_palettes()
 ```
 
 ![vangogh_image](images/vangogh_small.png?raw=true "Starry Night")
 
-![vangogh_cmap](images/examples/vangogh_cmaps.png "Vangogh CMap Examples")
+![vangogh_palette](images/examples/vangogh_palettes.png "Vangogh palette Examples")
 
-Specific colormaps ((sequential, qualitative, etc) are stored as attributes for this object and are compatible with `matplotlib`, `seaborn`, and `plotly`.
+Specific palette types (sequential, qualitative, etc) are stored as attributes for this object and are compatible with `matplotlib`, `seaborn`, and `plotly`.
 ```py
-# sequential colormap in matplotlib
-plt.scatter(x, y, c=colors, cmap=vangogh.sequential)
+# sequential palette in matplotlib
+plt.scatter(x, y, c=colors, palette=vangogh.sequential)
 
-# qualitative colormap in matplotlib
+# qualitative palette in matplotlib
 plt.bar(categories, values, color=vangogh.qualitative)
 
-# qualitative colormap in seaborn
+# qualitative palette in seaborn
 sns.swarmplot(df, x="x", y="y", hue="z", palette=vangogh.qualitative)
 
-# generic colormap in plotly
+# generic palette in plotly
 px.scatter(df, x="x", y="y", color="z", color_continuous_scale=vangogh.plotly)
 ```
-To get a sense for how well your colormap works, use the `display_example_plots` method
+To get a sense for how well your palette works, use the `display_example_plots` method
 ```py
-# this creates some misc plots using your generated colormaps
+# this creates some misc plots using your generated palettes
 vangogh.display_example_plots()
 ```
 ![vangogh_example](images/examples/vangogh_output.png)
 
-`palettecleanser` also comes prepackaged with some custom colormaps:
+`palettecleanser` also comes prepackaged with some custom palettes:
 ```py
-from palettecleanser import colormaps
+from palettecleanser import custom
 
-colormaps.TwilightSunset.display_all_cmaps()
+custom.TwilightSunset.display_all_palettes()
 ```
-![TwilightSunset cmap](images/examples/sunset_cmaps.png)
+![TwilightSunset palette](images/examples/sunset_palettes.png)
 
 See `usage.ipynb` for more examples.
 

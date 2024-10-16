@@ -1,5 +1,5 @@
 """
-Collection of CMap objects
+Collection of Palette objects
 """
 
 from colorsys import rgb_to_hsv
@@ -13,16 +13,16 @@ from PIL import Image
 from sklearn.cluster import KMeans
 
 
-class CMap:
+class Palette:
     """
-    Base colormap (CMap) class
+    Base palette class
     """
 
     def __init__(
-        self, image_fname: str, cmap_type: str = "sequential", n_colors: int = 5
+        self, image_fname: str, n_colors: int = 5
     ) -> None:
         """
-        Initialize the CMap object with an image, colormap type, and number of colors
+        Initialize the Palette object with an image, palette type, and number of colors
 
         Args:
             image_fname (str): filename to image
@@ -39,8 +39,8 @@ class CMap:
         self.diverging = self.generate_diverging()
         self.cyclic = self.generate_cyclic()
         self.qualitative = self.generate_qualitative_raw()
-        self.qualitative_cmap = self.generate_qualitative_cmap()
-        self.plotly = self.plotly_cmap()
+        self.qualitative_palette = self.generate_qualitative_palette()
+        self.plotly = self.plotly_palette()
 
     def load_image(self) -> Image:
         """
@@ -82,7 +82,7 @@ class CMap:
 
     def generate_sequential(self) -> mcolors.LinearSegmentedColormap:
         """
-        Generates a sequential colormap
+        Generates a sequential palette
 
         Args:
             (None)
@@ -99,14 +99,14 @@ class CMap:
 
     def generate_diverging(self) -> mcolors.LinearSegmentedColormap:
         """
-        Generates a diverging colormap
+        Generates a diverging palette
 
         Args:
             (None)
         Returns:
             (mcolors.LinearSegmentedColorMap)
         """
-        # find midpoint of colors and split cmap into less or greater than midpoint
+        # find midpoint of colors and split palette into less or greater than midpoint
         if len(self.colors) >= 2:
             midpoint = len(self.colors) // 2
             diverging_colors = np.vstack(
@@ -117,12 +117,12 @@ class CMap:
             )
         else:
             raise ValueError(
-                "Image must contain at least two colors for diverging colormap"
+                "Image must contain at least two colors for diverging palette"
             )
 
     def generate_cyclic(self) -> mcolors.LinearSegmentedColormap:
         """
-        Generates a cyclic colormap
+        Generates a cyclic palette
 
         Args:
             (None)
@@ -136,24 +136,24 @@ class CMap:
     def generate_qualitative_raw(self) -> np.ndarray:
         """
         Generates a raw array of colors (self.qualitative) corresponding to qualitative
-        colormap.
+        palette.
 
         Some plotting libraries utilize a raw array of colors as opposed
-        to a mcolors object for qualitative colormaps
+        to a mcolors object for qualitative palettes
 
         Args:
             (None)
         Returns:
-            (np.ndarray): a shuffled array of colors spaced within colormap
+            (np.ndarray): a shuffled array of colors spaced within palette
         """
-        np.random.seed(42)  # to keep generated cmap consistent
+        np.random.seed(42)  # to keep generated palette consistent
         colors = self.sequential(np.linspace(0, 1, self.n_colors))
         np.random.shuffle(colors)  # this modifies in line
         return colors
 
-    def generate_qualitative_cmap(self) -> mcolors.ListedColormap:
+    def generate_qualitative_palette(self) -> mcolors.ListedColormap:
         """
-        Generates a qualitative colormap (self.qualitative_cmap)
+        Generates a qualitative palette (self.qualitative_palette)
 
         Note - the `generate_qualitative_raw` method is likely preferred
         for certain plotting libraries
@@ -161,11 +161,11 @@ class CMap:
         Args:
             (None)
         Returns:
-            (mcolors.ListedColormap): a shuffled array of colors spaced within colormap
+            (mcolors.ListedColormap): a shuffled array of colors spaced within palette
         """
         return mcolors.ListedColormap(self.colors, name="qualitative")
 
-    def plotly_cmap(self) -> list:
+    def plotly_palette(self) -> list:
         """
         Converts colors array to a hex sorted list for plotting in `plotly` library
 
@@ -173,54 +173,54 @@ class CMap:
             (None)
 
         Returns:
-            list: list containing converted hex colormap
+            list: list containing converted hex palette
         """
 
-        return convert_rgb_cmap_to_hex(list(self.colors))
+        return convert_rgb_palette_to_hex(list(self.colors))
 
-    def display_all_cmaps(self) -> None:
+    def display_all_palettes(self) -> None:
         """
-        Displays all possible colormap options
+        Displays all possible palette options
 
         Args:
             (None)
         Returns:
             (None)
         """
-        cmap_names = ["sequential", "diverging", "cyclic", "qualitative"]
-        cmap_types = [
+        palette_names = ["sequential", "diverging", "cyclic", "qualitative"]
+        palette_types = [
             self.sequential,
             self.diverging,
             self.cyclic,
-            self.qualitative_cmap,
+            self.qualitative_palette,
         ]
-        n_cmaps = len(cmap_types)
+        n_palettes = len(palette_types)
 
         # remember what initiated with in order to reset after
         # iterating through
         init_colors = self.colors
 
-        _, axes = plt.subplots(n_cmaps, 1, figsize=(6, 3))
+        _, axes = plt.subplots(n_palettes, 1, figsize=(6, 3))
 
-        # generate the gradient for colormap display
+        # generate the gradient for palette display
         gradient = np.linspace(0, 1, 256)
         gradient = np.vstack((gradient, gradient))
 
-        # iterate over each colormap type and display it
-        for ax, cmap, name in zip(axes, cmap_types, cmap_names):
-            ax.imshow(gradient, aspect="auto", cmap=cmap)
+        # iterate over each palette type and display it
+        for ax, palette, name in zip(axes, palette_types, palette_names):
+            ax.imshow(gradient, aspect="auto", cmap=palette)
             ax.set_title(name)
             ax.axis("off")
 
         plt.tight_layout()
 
         # reset colors to original. This is to avoid the scenario
-        # in which displaying all cmaps changes the colors var
+        # in which displaying all palettes changes the colors var
         self.colors = init_colors
 
     def display_example_plots(self) -> None:
         """
-        Applies colormap to selection of preprogrammed plots for ease of data
+        Applies palette to selection of preprogrammed plots for ease of data
         visualization. Note only matplotlib & seaborn plots generated due to
         difference in plotly subplot interactions
 
@@ -290,7 +290,7 @@ class CMap:
             pc.set_facecolor(self.qualitative[i])
             pc.set_edgecolor(self.qualitative[0])
             pc.set_alpha(0.8)
-            # set extrema bars to be last indexed color in cmap
+            # set extrema bars to be last indexed color in palette
             for partname in ("cbars", "cmins", "cmaxes"):
                 p[partname].set_color(self.qualitative[-1])
         axes[1, 1].set_title("Violin Plot")
@@ -348,41 +348,41 @@ def convert_rgb_to_hex(rgb: np.array) -> str:
     return "#{:02x}{:02x}{:02x}".format(rgb[0], rgb[1], rgb[2])
 
 
-def sort_rgb_by_hsv(rgb_cmap: list) -> list:
+def sort_rgb_by_hsv(rgb_palette: list) -> list:
     """
     Sorts a list of RGB colors based off HSV values
 
     Args:
-        rgb_cmap (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
+        rgb_palette (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
 
     Returns:
-        list:sorted rgb cmap
+        list:sorted rgb palette
     """
-    return sorted(rgb_cmap, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
+    return sorted(rgb_palette, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
 
 
-def convert_rgb_cmap_to_hex(rgb_cmap: list) -> list:
+def convert_rgb_palette_to_hex(rgb_palette: list) -> list:
     """
-    Converts a list of np.arrays containing an entire colormap of rgb values to a list of hex values
+    Converts a list of np.arrays containing an entire palette of rgb values to a list of hex values
 
     Args:
-        rgb_cmap (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
+        rgb_palette (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
 
     Returns:
-        list: list containing converted hex colormap
+        list: list containing converted hex palette
 
     """
-    hex_cmap = []
+    hex_palette = []
 
     # first, sort rgb colors based off hsv
-    rgb_cmap_sorted = sorted(rgb_cmap, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
+    rgb_palette_sorted = sorted(rgb_palette, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
 
-    # iterate through sorted cmap - particularly important for plotly since
-    # plotly doesn't apply any logic onto colormapss
-    for c in rgb_cmap_sorted:
-        hex_cmap.append(convert_rgb_to_hex(c))
+    # iterate through sorted palette - particularly important for plotly since
+    # plotly doesn't apply any logic onto palettes
+    for c in rgb_palette_sorted:
+        hex_palette.append(convert_rgb_to_hex(c))
 
-    return hex_cmap
+    return hex_palette
 
 
 def compress_image_inplace(image_path: str) -> None:
@@ -398,7 +398,7 @@ def compress_image_inplace(image_path: str) -> None:
     compression_size = (500, 500)
 
     # tiffs and other rarer format compression not supported
-    if image_path.endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gip')):
+    if image_path.endswith((".jpg", ".jpeg", ".png", ".bmp", ".gip")):
         img = Image.open(image_path)
         if img.size <= compression_size:
             print(

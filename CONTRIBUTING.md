@@ -10,7 +10,7 @@ For any images saved in `palettecleanser`, please run the `compress_image_inplac
 
 #### Full resolution
 ![full_res](images/pink_roses_full_res.jpg)
-#### Compressed via. `compress_image_inplace`
+#### Compressed via. `Compress_image_inplace`
 ![compressed](images/pink_roses.jpg)
 
 
