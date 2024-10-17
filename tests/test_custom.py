@@ -1,17 +1,13 @@
 """Test suite for pre-defined palettes"""
-
 import os
-import sys
 
 from PIL import Image
 from tqdm import tqdm
 
-sys.path.append("..")
-# os.chdir('..')
-from ..custom import *
+from ..palettecleanser.custom import *
 
 COMPRESSION_SIZE = (500, 500)
-IMAGE_PATH = "images/"
+IMAGE_PATH = "palettecleanser/images/"
 # high resolution images that are kept for demo purposes
 OMIT = [
     f"{IMAGE_PATH}vangogh.jpg",

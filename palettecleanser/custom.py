@@ -9,19 +9,21 @@ from tqdm import tqdm
 # for pytest relative import issue
 try:
     from palettes import Palette
+    fpath = 'images/'
 except ImportError:
     from .palettes import Palette
+    fpath ='palettecleanser/images/'
 
-Vangogh = Palette("images/vangogh.jpg")
-GreatWave = Palette("images/great_wave.jpg")
-PinkRoses = Palette("images/pink_roses.jpg")
-RedRose = Palette("images/red_roses.jpg")
-TwilightSunset = Palette("images/sunset.jpg")
-BladerunnerOlive = Palette("images/bladerunner_olive.jpg")
-Water = Palette("images/water.jpg")
-Candles = Palette("images/candles.jpg")
-NeighborhoodSucculents = Palette("images/neighborhood_succulents.jpg")
-Dance = Palette("images/dance.jpg")
+Vangogh = Palette(f"{fpath}vangogh.jpg")
+GreatWave = Palette(f"{fpath}great_wave.jpg")
+PinkRoses = Palette(f"{fpath}pink_roses.jpg")
+RedRose = Palette(f"{fpath}red_roses.jpg")
+TwilightSunset = Palette(f"{fpath}sunset.jpg")
+BladerunnerOlive = Palette(f"{fpath}bladerunner_olive.jpg")
+Water = Palette(f"{fpath}water.jpg")
+Candles = Palette(f"{fpath}candles.jpg")
+NeighborhoodSucculents = Palette(f"{fpath}neighborhood_succulents.jpg")
+Dance = Palette(f"{fpath}dance.jpg")
 
 all_customs = {
     Vangogh: "Vangogh",

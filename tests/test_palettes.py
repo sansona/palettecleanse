@@ -1,17 +1,13 @@
 """Test suite for palette class & functions in palettecleanser"""
 
-import sys
-
 import numpy as np
 import PIL
 import pytest
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
-sys.path.append("..")
+from ..palettecleanser.palettes import *
 
-from ..palettes import *
-
-im_fname = "images/vangogh.jpg"
+im_fname = "palettecleanser/images/vangogh.jpg"
 
 
 @pytest.fixture
@@ -81,10 +77,10 @@ def test_palette_example_plots(palette):
 def test_palette_image_extension_sensitivity():
     """Tests that palette can load other file extensions. Most
     errors will be caught upon initialization"""
-    Palette("images/vangogh.bmp")
-    Palette("images/vangogh.gif")
-    Palette("images/vangogh.png")
-    Palette("images/vangogh.tiff")
+    Palette("palettecleanser/images/vangogh.bmp")
+    Palette("palettecleanser/images/vangogh.gif")
+    Palette("palettecleanser/images/vangogh.png")
+    Palette("palettecleanser/images/vangogh.tiff")
 
 
 def test_convert_rgb_to_hex():
@@ -107,7 +103,7 @@ def test_convert_rgb_palette_to_hex_palette():
         np.array([127, 127, 127]),
         np.array([65, 65, 65]),
         np.array([199, 250, 0]),
-        np.array([0, 77, 20]) ,
+        np.array([0, 77, 20]),
         np.array([210, 0, 7]),
     ]
     # normalize to [0, 1]
