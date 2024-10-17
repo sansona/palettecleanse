@@ -37,6 +37,9 @@ To get a sense for how well your palette works, use the `display_example_plots` 
 ```py
 # this creates some misc plots using your generated palettes
 vangogh.display_example_plots()
+
+# plotly equivalent
+vangogh.display_plotly_examples()
 ```
 ![vangogh_example](images/examples/vangogh_output.png)
 

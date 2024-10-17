@@ -75,6 +75,7 @@ def test_palette_display(palette):
 def test_palette_example_plots(palette):
     """Tests that palette able to make example plots"""
     palette.display_example_plots()
+    palette.display_plotly_examples()
 
 
 def test_palette_image_extension_sensitivity():
