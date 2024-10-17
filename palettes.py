@@ -12,6 +12,8 @@ from lifelines import KaplanMeierFitter
 from PIL import Image
 from sklearn.cluster import KMeans
 
+COMPRESSION_SIZE = (500, 500)
+
 
 class Palette:
     """
@@ -393,22 +395,21 @@ def compress_image_inplace(image_path: str) -> None:
     Returns:
         (None)
     """
-    compression_size = (500, 500)
 
     # tiffs and other rarer format compression not supported
     if image_path.endswith((".jpg", ".jpeg", ".png", ".bmp", ".gip")):
         img = Image.open(image_path)
-        if img.size <= compression_size:
+        if img.size <= COMPRESSION_SIZE:
             print(
-                f"{image_path} size ({img.size}) less than `compression_limit` ({compression_size}) - no compression applied"
+                f"{image_path} size ({img.size}) less than `compression_limit` ({COMPRESSION_SIZE}) - no compression applied"
             )
         else:
             initial_size = img.size
-            img = img.resize(compression_size)
+            img = img.resize(COMPRESSION_SIZE)
             # note this saves inplace & overwrites the original
             img.save(image_path, optimize=True, quality=85)
             print(
-                f"{image_path} compressed - ({initial_size[0]-compression_size[0], initial_size[1]-compression_size[1]}) space saved."
+                f"{image_path} compressed - ({initial_size[0]-COMPRESSION_SIZE[0], initial_size[1]-COMPRESSION_SIZE[1]}) space saved."
             )
     else:
         print(f"{image_path} file extension not supported.")

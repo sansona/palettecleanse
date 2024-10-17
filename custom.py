@@ -6,7 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-from palettes import Palette
+# for pytest relative import issue
+try:
+    from palettes import Palette
+except ImportError:
+    from .palettes import Palette
 
 Vangogh = Palette("images/vangogh.jpg")
 GreatWave = Palette("images/great_wave.jpg")
@@ -30,7 +34,7 @@ all_customs = {
     Candles: "Candles",
     NeighborhoodSucculents: "NeighborhoodSucculents",
     Dance: "Dance",
-}
+}                     
 
 
 def display_all_custom_palettes(palette_type) -> None:

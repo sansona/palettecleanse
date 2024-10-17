@@ -24,6 +24,8 @@ To add a custom color palette to `palettecleanser`:
 ### Tests
 Each new contribution should have corresponding test coverage. I'd like to retain 100% coverage on ```palettecleanser```. `pytest` is the current testing package.
 
+Tests should be run in the main `palettecleanser` directory via. the `pytest` module command.
+
 ### Commit messages
 Please follow the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary) standard for commit messages. Quoting from their website, the basic structure is:
 ```

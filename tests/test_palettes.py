@@ -8,9 +8,10 @@ import pytest
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 sys.path.append("..")
-from palettes import *
 
-im_fname = "../images/vangogh.jpg"
+from ..palettes import *
+
+im_fname = "images/vangogh.jpg"
 
 
 @pytest.fixture
@@ -79,10 +80,10 @@ def test_palette_example_plots(palette):
 def test_palette_image_extension_sensitivity():
     """Tests that palette can load other file extensions. Most
     errors will be caught upon initialization"""
-    Palette("../images/vangogh.bmp")
-    Palette("../images/vangogh.gif")
-    Palette("../images/vangogh.png")
-    Palette("../images/vangogh.tiff")
+    Palette("images/vangogh.bmp")
+    Palette("images/vangogh.gif")
+    Palette("images/vangogh.png")
+    Palette("images/vangogh.tiff")
 
 
 def test_convert_rgb_to_hex():
