@@ -15,9 +15,9 @@ vangogh = Palette('images/vangogh.jpg')
 vangogh.display_all_palettes()
 ```
 
-![vangogh_image](images/vangogh_small.png?raw=true "Starry Night")
+![vangogh_image](palettecleanser/images/vangogh_small.png?raw=true "Starry Night")
 
-![vangogh_palette](images/examples/vangogh_palettes.png "Vangogh palette Examples")
+![vangogh_palette](palettecleanser/images/examples/vangogh_palettes.png "Vangogh palette Examples")
 
 Specific palette types (sequential, qualitative, etc) are stored as attributes for this object and are compatible with `matplotlib`, `seaborn`, and `plotly`.
 ```py
@@ -41,7 +41,7 @@ vangogh.display_example_plots()
 # plotly equivalent
 vangogh.display_plotly_examples()
 ```
-![vangogh_example](images/examples/vangogh_output.png)
+![vangogh_example](palettecleanser/images/examples/vangogh_output.png)
 
 `palettecleanser` also comes prepackaged with some custom palettes:
 ```py
@@ -49,7 +49,7 @@ from palettecleanser import custom
 
 custom.TwilightSunset.display_all_palettes()
 ```
-![TwilightSunset palette](images/examples/sunset_palettes.png)
+![TwilightSunset palette](palettecleanser/images/examples/sunset_palettes.png)
 
 See `usage.ipynb` for more examples.
 
@@ -58,20 +58,20 @@ All available custom palettes can be accessed via. the `display_all_custom_palet
 ```py
 custom.display_all_custom_palettes('sequential')
 ```
-![Custom Sequentials](images/examples/custom_sequentials.png)
+![Custom Sequentials](palettecleanser/images/examples/custom_sequentials.png)
 
 Below are example plots made using via. the `display_example_plots` method that can be used to get a bird's eye view on how well a palette behaves across generic plot types
 ### Hokusai - The Great Wave off Kanagawa
-![great_wave_example](images/examples/great_wave_output.png)
+![great_wave_example](palettecleanser/images/examples/great_wave_output.png)
 
 ### Red Rose
-![red_roses_example](images/examples/red_roses_output.png)
+![red_roses_example](palettecleanser/images/examples/red_roses_output.png)
 
 ### Sunset
-![sunset_example](images/examples/sunset_output.png)
+![sunset_example](palettecleanser/images/examples/sunset_output.png)
 
 ### Bladerunner Olive
-![bladerunner_olive](images/examples/bladerunner_olive_output.png)
+![bladerunner_olive](palettecleanser/images/examples/bladerunner_olive_output.png)
 
 More examples available in `usage.ipynb`.
 
