@@ -3,8 +3,8 @@ requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "palettecleanser"
-version = "1.0.8"
+name = "palettecleanse"
+version = "1.1.0"
 requires-python = ">= 3.8"
 authors = [
     {name = "Jiaming Chen", email = "jiaming.justin.chen@gmail.com"}
@@ -12,7 +12,7 @@ authors = [
 maintainers = [
     {name = "Jiaming Chen", email = "jiaming.justin.chen@gmail.com"}
 ]
-description = "palettecleanser is a python library for quick conversions of images to custom color palettes"
+description = "palettecleanse is a python library for quick conversions of images to custom color palettes"
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 keywords = ["matplotlib", "seaborn", "plotly", "data visualization", "color map", "color palette", "palette"]
@@ -20,8 +20,8 @@ keywords = ["matplotlib", "seaborn", "plotly", "data visualization", "color map"
 [tool.setuptools]
 include-package-data = true
 [tool.setuptools.packages.find]
-where = [".", "palettecleanser"]
+where = [".", "palettecleanse"]
 
 [project.urls]
-Homepage = "https://github.com/sansona/palettecleanser"
-Issues = "https://github.com/sansona/palettecleanser/issues"
+Homepage = "https://github.com/sansona/palettecleanse"
+Issues = "https://github.com/sansona/palettecleanse/issues"

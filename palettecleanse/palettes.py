@@ -556,7 +556,7 @@ def convert_rgb_palette_to_hex(rgb_palette: list) -> list:
 def compress_image_inplace(image_path: str) -> None:
     """
     Compresses image in place to reduce package storage.
-    Used for packaging `palettecleanser`
+    Used for packaging `palettecleanse`
 
     Args:
         image_path (str) -> path to image

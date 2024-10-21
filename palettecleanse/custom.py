@@ -9,12 +9,12 @@ import os
 
 # for pytest relative import issue
 try:
-    from palettecleanser.palettes import Palette
+    from palettecleanse.palettes import Palette
     os.chdir(os.path.join(os.path.dirname(__file__), '../images/'))
     fpath = os.getcwd()
 except ImportError:
     from .palettes import Palette
-    fpath ='palettecleanser/images'
+    fpath ='palettecleanse/images'
 
 Vangogh = Palette(f"{fpath}/vangogh.jpg")
 GreatWave = Palette(f"{fpath}/great_wave.jpg")

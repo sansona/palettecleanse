@@ -4,10 +4,10 @@ import os
 from PIL import Image
 from tqdm import tqdm
 
-from ..palettecleanser.custom import *
+from ..palettecleanse.custom import *
 
 COMPRESSION_SIZE = (500, 500)
-IMAGE_PATH = "palettecleanser/images/"
+IMAGE_PATH = "palettecleanse/images/"
 # high resolution images that are kept for demo purposes
 OMIT = [
     f"{IMAGE_PATH}vangogh.jpg",
