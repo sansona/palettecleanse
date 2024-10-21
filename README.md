@@ -11,7 +11,7 @@ For manually installing requirements:
 
 To verify the installation worked, run the following code:
 ```py
-from palettes.custom import TwilightSunset
+from palettecleanse.custom import TwilightSunset
 
 TwilightSunset.display_plotly_examples()
 ```
