@@ -19,4 +19,4 @@ keywords = ["matplotlib", "seaborn", "seaborn", "data visualization", "color map
 
 [project.urls]
 Homepage = "https://github.com/sansona/palettecleanser"
-Issues = "Issues = "https://github.com/sansona/palettecleanser/issues"
+Issues = "https://github.com/sansona/palettecleanser/issues"
