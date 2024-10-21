@@ -1,0 +1,3 @@
+include palettecleanser/images/*
+include palettecleanser/*.py
+include tests/*.py

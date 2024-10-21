@@ -5,6 +5,17 @@
 ---
 ## Installation
 ```pip import palettecleanser```
+
+For manually installing requirements:
+``` pip install -r requirements.txt```
+
+To verify the installation worked, run the following code:
+```py
+from palettes.custom import TwilightSunset
+
+TwilightSunset.display_plotly_examples()
+```
+
 ## Quickstart
 To convert an image to a custom color palette, simply select an image and load it into `palettecleanser` as a `Palette` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available palettes for the image can be displayed via. the `display_all_palettes` method.
 ```py
@@ -45,9 +56,9 @@ vangogh.display_plotly_examples()
 
 `palettecleanser` also comes prepackaged with some custom palettes:
 ```py
-from palettecleanser import custom
+from palettecleanser.custom import TwilightSunset
 
-custom.TwilightSunset.display_all_palettes()
+TwilightSunset.display_all_palettes()
 ```
 ![TwilightSunset palette](palettecleanser/images/examples/sunset_palettes.png)
 
@@ -56,7 +67,7 @@ See `usage.ipynb` for more examples.
 ## Examples
 All available custom palettes can be accessed via. the `display_all_custom_palettes` method
 ```py
-custom.display_all_custom_palettes('sequential')
+display_all_custom_palettes('sequential')
 ```
 ![Custom Sequentials](palettecleanser/images/examples/custom_sequentials.png)
 
