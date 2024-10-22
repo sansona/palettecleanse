@@ -92,6 +92,6 @@ Contributions at all levels are welcome! I'm happy to discuss with anyone the po
 ## Meta
 Jiaming Chen –  jiaming.justin.chen@gmail.com
 
-Distributed under the GPL 3 (or any later version) license. See ``LICENSE`` for more information.
+Distributed under the MIT license. See ``LICENSE.txt`` for more information.
 
 [https://github.com/sansona/palettecleanse](https://github.com/sansona/)

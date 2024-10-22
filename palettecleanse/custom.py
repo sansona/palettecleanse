@@ -2,19 +2,24 @@
 Collection of predefined color palettes. See `images` folder
 """
 
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
-import os
+
+starting_dir = os.getcwd()
 
 # for pytest relative import issue
 try:
     from palettecleanse.palettes import Palette
-    os.chdir(os.path.join(os.path.dirname(__file__), '../images/'))
+
+    os.chdir(os.path.join(os.path.dirname(__file__), "../images/"))
     fpath = os.getcwd()
 except ImportError:
     from .palettes import Palette
-    fpath ='palettecleanse/images'
+
+    fpath = "palettecleanse/images"
 
 Vangogh = Palette(f"{fpath}/vangogh.jpg")
 GreatWave = Palette(f"{fpath}/great_wave.jpg")
@@ -38,7 +43,9 @@ all_customs = {
     Candles: "Candles",
     NeighborhoodSucculents: "NeighborhoodSucculents",
     Dance: "Dance",
-}                     
+}
+
+os.chdir(starting_dir)
 
 
 def display_all_custom_palettes(palette_type) -> None:
@@ -71,7 +78,11 @@ def display_all_custom_palettes(palette_type) -> None:
 
     fig, axes = plt.subplots(n_customs, 1, figsize=(10, n_customs // 1.25))
     # iterate over each custom & display
-    for ax, palette, name in tqdm(zip(axes, all_palettes, all_customs.values()), desc=f'Generating {palette_type} displays...', total=n_customs):
+    for ax, palette, name in tqdm(
+        zip(axes, all_palettes, all_customs.values()),
+        desc=f"Generating {palette_type} displays...",
+        total=n_customs,
+    ):
         ax.imshow(gradient, aspect="auto", cmap=palette)
         ax.set_title(name)
         ax.axis("off")

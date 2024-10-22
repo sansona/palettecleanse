@@ -9,9 +9,9 @@ out [to me](mailto:jiaming.justin.chen@gmail.com)! I'm more than willing and ava
 For any images saved in `palettecleanse`, please run the `compress_image_inplace` function prior to the pull request in order to minimize the size of the overall package. NOTE that this function will modify implace, so please make sure you have backups of your original if needed.
 
 #### Full resolution
-![full_res](images/pink_roses_full_res.jpg)
+![full_res](palettecleanse/images/pink_roses_full_res.jpg)
 #### Compressed via. `compress_image_inplace`
-![compressed](images/pink_roses.jpg)
+![compressed](palettecleanse/images/pink_roses.jpg)
 
 ### Custom Palettes
 To add a custom color palette to `palettecleanse`:
