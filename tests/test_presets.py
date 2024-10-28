@@ -41,4 +41,4 @@ def test_all_palettes() -> None:
     for pal in tqdm(
         palette_types, desc=f"Generating test displays...", total=len(palette_types)
     ):
-        display_all_custom_palettes(pal)
+        display_all_preset_palettes(pal)

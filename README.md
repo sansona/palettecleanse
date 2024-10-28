@@ -11,7 +11,7 @@ For manually installing requirements:
 
 To verify the installation worked, run the following code:
 ```py
-from palettecleanse.custom import TwilightSunset
+from palettecleanse.presets import TwilightSunset
 
 TwilightSunset.display_plotly_examples()
 ```
@@ -54,9 +54,9 @@ vangogh.display_plotly_examples()
 ```
 ![vangogh_example](palettecleanse/images/examples/vangogh_output.png)
 
-`palettecleanse` also comes prepackaged with some custom palettes:
+`palettecleanse` also comes prepackaged with some preset palettes:
 ```py
-from palettecleanse.custom import TwilightSunset
+from palettecleanse.presets import TwilightSunset
 
 TwilightSunset.display_all_palettes()
 ```
@@ -65,11 +65,11 @@ TwilightSunset.display_all_palettes()
 See `usage.ipynb` for more examples.
 
 ## Examples
-All available custom palettes can be accessed via. the `display_all_custom_palettes` method
+All available preset palettes can be accessed via. the `display_all_preset_palettes` method
 ```py
-display_all_custom_palettes('sequential')
+display_all_preset_palettes('sequential')
 ```
-![Custom Sequentials](palettecleanse/images/examples/custom_sequentials.png)
+![Preset Sequentials](palettecleanse/images/examples/custom_sequentials.png)
 
 Below are example plots made using via. the `display_example_plots` method that can be used to get a bird's eye view on how well a palette behaves across generic plot types
 ### Hokusai - The Great Wave off Kanagawa

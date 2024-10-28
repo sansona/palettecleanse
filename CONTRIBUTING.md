@@ -6,19 +6,19 @@ out [to me](mailto:jiaming.justin.chen@gmail.com)! I'm more than willing and ava
 ### Style
 `palettecleanse` utilizes [ruff](https://github.com/astral-sh/ruff) for general formatting and [pep8](https://www.python.org/dev/peps/pep-0008/) for overall style. Simply running the `Format document`, `Format imports` functions in [ruff](https://github.com/astral-sh/ruff) should work.
 
-For any images saved in `palettecleanse`, please run the `compress_image_inplace` function prior to the pull request in order to minimize the size of the overall package. NOTE that this function will modify implace, so please make sure you have backups of your original if needed.
+For any images saved in `palettecleanse`, please run the `utils.compress_image_inplace` function prior to the pull request in order to minimize the size of the overall package. NOTE that this function will modify implace, so please make sure you have backups of your original if needed.
 
 #### Full resolution
 ![full_res](palettecleanse/images/pink_roses_full_res.jpg)
 #### Compressed via. `compress_image_inplace`
 ![compressed](palettecleanse/images/pink_roses.jpg)
 
-### Custom Palettes
-To add a custom color palette to `palettecleanse`:
+### Preset Palettes
+To add a preset color palette to `palettecleanse`:
 1. Add the image to the `images` folder. <b>Non-licensed/copyrighted images only.</b>
 2. Compress the image using the `compress_image_inplace` function provided. Note that this modifies the image in place, so please make sure you have backups if needed.
-3. Add a custom palette to `custom.py` as a standalone variable & in the `all_customs` dictionary. Note that the `n_colors` attribute can be evaluated to determine what an appropriate number of color clusters is for your image.
-4. Run the test suite to ensure that your colormap works. It may also be a good idea to explicitly run the `display_all_custom_palettes` method to confirm visually that your palette is included.
+3. Add a preset palette to `presets.py` as a standalone variable & in the `all_presets` dictionary. Note that the `n_colors` attribute can be evaluated to determine what an appropriate number of color clusters is for your image.
+4. Run the test suite to ensure that your colormap works. It may also be a good idea to explicitly run the `display_all_preset_palettes` method to confirm visually that your palette is included.
 5. Pull request!
 
 ### Tests

@@ -34,7 +34,7 @@ Candles = Palette(f"{fpath}/candles.jpg")
 NeighborhoodSucculents = Palette(f"{fpath}/neighborhood_succulents.jpg")
 Dance = Palette(f"{fpath}/dance.jpg")
 
-all_customs = {
+all_presets = {
     Vangogh: "Vangogh",
     GreatWave: "GreatWave",
     PinkRoses: "PinkRoses",
@@ -50,9 +50,9 @@ all_customs = {
 os.chdir(starting_dir)
 
 
-def display_all_custom_palettes(palette_type) -> None:
+def display_all_preset_palettes(palette_type) -> None:
     """
-    Displays all custom palette options in a single plot
+    Displays all preset palette options in a single plot
 
     Args:
         palette_type (str): see utils.PaletteTypes
@@ -64,19 +64,19 @@ def display_all_custom_palettes(palette_type) -> None:
         return f"{palette_type} not in [available_types]"
 
     # get the corresponding colormap for the type of `palette_type`
-    n_customs = len(all_customs.keys())
-    all_palettes = [getattr(x, palette_type) for x in all_customs.keys()]
+    n_presets = len(all_presets.keys())
+    all_palettes = [getattr(x, palette_type) for x in all_presets.keys()]
 
     # generate the gradient for palette display
     gradient = np.linspace(0, 1, 256)
     gradient = np.vstack((gradient, gradient))
 
-    fig, axes = plt.subplots(n_customs, 1, figsize=(10, n_customs // 1.25))
-    # iterate over each custom & display
+    fig, axes = plt.subplots(n_presets, 1, figsize=(10, n_presets // 1.25))
+    # iterate over each preset & display
     for ax, palette, name in tqdm(
-        zip(axes, all_palettes, all_customs.values()),
+        zip(axes, all_palettes, all_presets.values()),
         desc=f"Generating {palette_type} displays...",
-        total=n_customs,
+        total=n_presets,
     ):
         ax.imshow(gradient, aspect="auto", cmap=palette)
         ax.set_title(name)
