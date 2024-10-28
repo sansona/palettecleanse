@@ -12,12 +12,12 @@ starting_dir = os.getcwd()
 
 # for pytest relative import issue
 try:
-    from palettecleanse.palettes import Palette
+    from palettecleanse.palette import Palette
 
     os.chdir(os.path.join(os.path.dirname(__file__), "../images/"))
     fpath = os.getcwd()
 except ImportError:
-    from .palettes import Palette
+    from .palette import Palette
 
     fpath = "palettecleanse/images"
 

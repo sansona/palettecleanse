@@ -1,5 +1,5 @@
 """
-Collection of Palette objects
+Palette class
 """
 
 from colorsys import rgb_to_hsv
@@ -19,10 +19,6 @@ np.random.seed(42)  # to keep generated palette consistent
 
 
 class Palette:
-    """
-    Base palette class
-    """
-
     def __init__(self, image_fname: str, n_colors: int = 5) -> None:
         """
         Initialize the Palette object with an image, palette type, and number of colors

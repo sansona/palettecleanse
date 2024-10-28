@@ -1,10 +1,10 @@
-"""Test suite for pre-defined palettes"""
+"""Test suite for preset palettes"""
 import os
 
 from PIL import Image
 from tqdm import tqdm
 
-from ..palettecleanse.custom import *
+from ..palettecleanse.presets import *
 
 COMPRESSION_SIZE = (500, 500)
 IMAGE_PATH = "palettecleanse/images/"

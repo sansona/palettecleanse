@@ -5,7 +5,7 @@ import PIL
 import pytest
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
-from ..palettecleanse.palettes import *
+from ..palettecleanse.palette import *
 
 im_fname = "palettecleanse/images/vangogh.jpg"
 
