@@ -5,9 +5,21 @@ from colorsys import rgb_to_hsv
 
 import numpy as np
 from PIL import Image
+from enum import Enum
 
 COMPRESSION_SIZE = (500, 500)
+np.random.seed(42)  # to keep generated palette consistent
 
+
+class PaletteTypes(Enum):
+    """
+    Used for storing & iterating through list of all
+    general palette types
+    """
+    SEQUENTIAL = 1
+    DIVERGING = 2
+    CYCLIC = 3
+    QUALITATIVE_PALETTE = 4 # note that this is the mColors object
 
 def compress_image_inplace(image_path: str) -> None:
     """

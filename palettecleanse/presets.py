@@ -13,11 +13,13 @@ starting_dir = os.getcwd()
 # for pytest relative import issue
 try:
     from palettecleanse.palette import Palette
+    from palettecleanse.utils import PaletteTypes
 
     os.chdir(os.path.join(os.path.dirname(__file__), "../images/"))
     fpath = os.getcwd()
 except ImportError:
     from .palette import Palette
+    from .utils import PaletteTypes
 
     fpath = "palettecleanse/images"
 
@@ -53,24 +55,17 @@ def display_all_custom_palettes(palette_type) -> None:
     Displays all custom palette options in a single plot
 
     Args:
-        palette_type (str): ['sequential', 'diverging', 'cyclic', 'qualitative']
+        palette_type (str): see utils.PaletteTypes
     Returns:
         (None)
     """
-    available_types = ["sequential", "diverging", "cyclic", "qualitative"]
+    available_types = [x.name.lower() for x in PaletteTypes]
     if palette_type not in available_types:
         return f"{palette_type} not in [available_types]"
 
     # get the corresponding colormap for the type of `palette_type`
     n_customs = len(all_customs.keys())
-    if palette_type == available_types[0]:
-        all_palettes = [x.sequential for x in all_customs.keys()]
-    elif palette_type == available_types[1]:
-        all_palettes = [x.diverging for x in all_customs.keys()]
-    elif palette_type == available_types[2]:
-        all_palettes = [x.cyclic for x in all_customs.keys()]
-    elif palette_type == available_types[3]:
-        all_palettes = [x.qualitative_palette for x in all_customs.keys()]
+    all_palettes = [getattr(x, palette_type) for x in all_customs.keys()]
 
     # generate the gradient for palette display
     gradient = np.linspace(0, 1, 256)

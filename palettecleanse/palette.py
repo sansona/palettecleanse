@@ -16,10 +16,10 @@ from sklearn.cluster import KMeans
 from functools import cached_property
 
 try:
-    from palettecleanse.utils import convert_rgb_palette_to_hex
+    from palettecleanse.utils import convert_rgb_palette_to_hex, PaletteTypes
 
 except ImportError:
-    from .utils import convert_rgb_palette_to_hex
+    from .utils import convert_rgb_palette_to_hex, PaletteTypes
 
 np.random.seed(42)  # to keep generated palette consistent
 
@@ -136,8 +136,7 @@ class Palette:
     @cached_property
     def qualitative(self) -> np.ndarray:
         """
-        Generates a raw array of colors (self.qualitative) corresponding to qualitative
-        palette.
+        Generates a raw array of colors (self.qualitative) corresponding to qualitative palette.
 
         Some plotting libraries utilize a raw array of colors as opposed
         to a mcolors object for qualitative palettes
@@ -189,7 +188,10 @@ class Palette:
         Returns:
             (None)
         """
-        palette_names = ["sequential", "diverging", "cyclic", "qualitative"]
+        palette_names = [x.name.lower() for x in PaletteTypes]
+
+        # ideally this would extract from the PaletteTypes enum but
+        # unclear as to how to reference from within Palette itself
         palette_types = [
             self.sequential,
             self.diverging,

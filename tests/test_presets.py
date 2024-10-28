@@ -5,6 +5,7 @@ from PIL import Image
 from tqdm import tqdm
 
 from ..palettecleanse.presets import *
+from ..palettecleanse.utils import PaletteTypes
 
 COMPRESSION_SIZE = (500, 500)
 IMAGE_PATH = "palettecleanse/images/"
@@ -35,7 +36,8 @@ def test_all_palettes() -> None:
     Note that this is a slow test given the number of displays,
     and may be a better idea to explicitly call the function in
     a notebook to confirm visually"""
-    palette_types = ["sequential", "diverging", "cyclic", "qualitative"]
+    palette_types = [x.name.lower() for x in PaletteTypes]
+
     for pal in tqdm(
         palette_types, desc=f"Generating test displays...", total=len(palette_types)
     ):
