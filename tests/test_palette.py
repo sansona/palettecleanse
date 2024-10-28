@@ -1,4 +1,5 @@
 """Test suite for palette class & functions in palettecleanse"""
+from colorsys import rgb_to_hsv
 
 import numpy as np
 import PIL
@@ -6,6 +7,7 @@ import pytest
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 from ..palettecleanse.palette import *
+from ..palettecleanse.utils import convert_rgb_palette_to_hex, convert_rgb_to_hex
 
 im_fname = "palettecleanse/images/vangogh.jpg"
 

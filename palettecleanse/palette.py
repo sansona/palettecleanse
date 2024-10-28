@@ -13,8 +13,14 @@ import seaborn as sns
 from lifelines import KaplanMeierFitter
 from PIL import Image
 from sklearn.cluster import KMeans
+from functools import cached_property
 
-COMPRESSION_SIZE = (500, 500)
+try:
+    from palettecleanse.utils import convert_rgb_palette_to_hex
+
+except ImportError:
+    from .utils import convert_rgb_palette_to_hex
+
 np.random.seed(42)  # to keep generated palette consistent
 
 
@@ -32,16 +38,10 @@ class Palette:
         """
         self.image_fname = image_fname
         self.n_colors = n_colors
-        self.image = self.load_image()
-        self.colors = self.extract_colors()
-        self.sequential = self.generate_sequential()
-        self.diverging = self.generate_diverging()
-        self.cyclic = self.generate_cyclic()
-        self.qualitative = self.generate_qualitative_raw()
-        self.qualitative_palette = self.generate_qualitative_palette()
-        self.plotly = self.plotly_palette()
+        self.image = self.__load_image()
+        self.colors = self.__extract_colors()
 
-    def load_image(self) -> Image:
+    def __load_image(self) -> Image:
         """
         Load the image, convert to RGB, and compress image.
         Compression primarily helps with clustering later on - large image
@@ -56,7 +56,7 @@ class Palette:
         img = img.resize((100, 100))
         return img
 
-    def extract_colors(self) -> np.ndarray:
+    def __extract_colors(self) -> np.ndarray:
         """
         Extract the `n_colors` dominant colors using KMeans clustering
 
@@ -74,12 +74,11 @@ class Palette:
         kmeans.fit(pixels)
 
         colors = kmeans.cluster_centers_
-        # normalize to [0, 1] range since most plotting libraries use that
-        colors = colors / 255.0
-
-        return colors
-
-    def generate_sequential(self) -> mcolors.LinearSegmentedColormap:
+        # most libraries use normalized colors
+        return colors / 255.0
+    
+    @cached_property
+    def sequential(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a sequential palette
 
@@ -96,7 +95,8 @@ class Palette:
 
         return mcolors.LinearSegmentedColormap.from_list("sequential", colors, N=256)
 
-    def generate_diverging(self) -> mcolors.LinearSegmentedColormap:
+    @cached_property
+    def diverging(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a diverging palette
 
@@ -119,7 +119,8 @@ class Palette:
                 "Image must contain at least two colors for diverging palette"
             )
 
-    def generate_cyclic(self) -> mcolors.LinearSegmentedColormap:
+    @cached_property
+    def cyclic(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a cyclic palette
 
@@ -132,7 +133,8 @@ class Palette:
         cyclic_colors = np.vstack((self.colors, self.colors[0]))
         return mcolors.LinearSegmentedColormap.from_list("cyclic", cyclic_colors, N=256)
 
-    def generate_qualitative_raw(self) -> np.ndarray:
+    @cached_property
+    def qualitative(self) -> np.ndarray:
         """
         Generates a raw array of colors (self.qualitative) corresponding to qualitative
         palette.
@@ -149,11 +151,12 @@ class Palette:
         np.random.shuffle(colors)  # this modifies in line
         return colors
 
-    def generate_qualitative_palette(self) -> mcolors.ListedColormap:
+    @cached_property
+    def qualitative_palette(self) -> mcolors.ListedColormap:
         """
         Generates a qualitative palette (self.qualitative_palette)
 
-        Note - the `generate_qualitative_raw` method is likely preferred
+        Note - the `qualitative` method is likely preferred
         for certain plotting libraries
 
         Args:
@@ -163,7 +166,8 @@ class Palette:
         """
         return mcolors.ListedColormap(self.colors, name="qualitative")
 
-    def plotly_palette(self) -> list:
+    @cached_property
+    def plotly(self) -> list:
         """
         Converts colors array to a hex sorted list for plotting in `plotly` library
 
@@ -318,7 +322,7 @@ class Palette:
         axes[1, 3].set_title("Heat Map")
 
         # turn off all labels
-        for i, ax in enumerate(axes.flatten()):
+        for ax in axes.flatten():
             ax.set_xticklabels([])
             ax.set_yticklabels([])
             ax.set_xlabel("")
@@ -490,90 +494,3 @@ class Palette:
             showlegend=False,
         )
         fig.show()
-
-
-def convert_rgb_to_hex(rgb: np.array) -> str:
-    """
-    Converts a len 3 np.array of rgb values to a hex string. Note that
-    function rounds any floats, so colors will not be absolutely identical
-    between rgb & hex
-
-    rgb values start off normalized between [0, 1]
-
-    https://stackoverflow.com/questions/3380726/converting-an-rgb-color-tuple-to-a-hexidecimal-string
-
-    Args:
-        rgb (np.array): rgb values in len 3 np.array
-    Returns:
-        str: hex value
-    """
-    rgb = rgb * 255  # unnormalize
-    rgb = rgb.astype(int)
-    return "#{:02x}{:02x}{:02x}".format(rgb[0], rgb[1], rgb[2])
-
-
-def sort_rgb_by_hsv(rgb_palette: list) -> list:
-    """
-    Sorts a list of RGB colors based off HSV values
-
-    Args:
-        rgb_palette (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
-
-    Returns:
-        list:sorted rgb palette
-    """
-    return sorted(rgb_palette, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
-
-
-def convert_rgb_palette_to_hex(rgb_palette: list) -> list:
-    """
-    Converts a list of np.arrays containing an entire palette of rgb values to a list of hex values
-
-    Args:
-        rgb_palette (list): List of np.arrays, each formatted as a len 3 np.array with rgb values
-
-    Returns:
-        list: list containing converted hex palette
-
-    """
-    hex_palette = []
-
-    # first, sort rgb colors based off hsv
-    rgb_palette_sorted = sorted(rgb_palette, key=lambda x: rgb_to_hsv(x[0], x[1], x[2]))
-
-    # iterate through sorted palette - particularly important for plotly since
-    # plotly doesn't apply any logic onto palettes
-    for c in rgb_palette_sorted:
-        hex_palette.append(convert_rgb_to_hex(c))
-
-    return hex_palette
-
-
-def compress_image_inplace(image_path: str) -> None:
-    """
-    Compresses image in place to reduce package storage.
-    Used for packaging `palettecleanse`
-
-    Args:
-        image_path (str) -> path to image
-    Returns:
-        (None)
-    """
-
-    # tiffs and other rarer format compression not supported
-    if image_path.endswith((".jpg", ".jpeg", ".png", ".bmp", ".gip")):
-        img = Image.open(image_path)
-        if img.size <= COMPRESSION_SIZE:
-            print(
-                f"{image_path} size ({img.size}) less than `compression_limit` ({COMPRESSION_SIZE}) - no compression applied"
-            )
-        else:
-            initial_size = img.size
-            img = img.resize(COMPRESSION_SIZE)
-            # note this saves inplace & overwrites the original
-            img.save(image_path, optimize=True, quality=85)
-            print(
-                f"{image_path} compressed - ({initial_size[0]-COMPRESSION_SIZE[0], initial_size[1]-COMPRESSION_SIZE[1]}) space saved."
-            )
-    else:
-        print(f"{image_path} file extension not supported.")
