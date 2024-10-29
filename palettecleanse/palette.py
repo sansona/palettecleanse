@@ -2,7 +2,7 @@
 Palette class
 """
 
-from colorsys import rgb_to_hsv
+from functools import cached_property
 
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
@@ -13,13 +13,12 @@ import seaborn as sns
 from lifelines import KaplanMeierFitter
 from PIL import Image
 from sklearn.cluster import KMeans
-from functools import cached_property
 
 try:
-    from palettecleanse.utils import convert_rgb_palette_to_hex, PaletteTypes
+    from palettecleanse.utils import PaletteTypes, convert_rgb_palette_to_hex
 
 except ImportError:
-    from .utils import convert_rgb_palette_to_hex, PaletteTypes
+    from .utils import PaletteTypes, convert_rgb_palette_to_hex
 
 np.random.seed(42)  # to keep generated palette consistent
 
@@ -76,7 +75,7 @@ class Palette:
         colors = kmeans.cluster_centers_
         # most libraries use normalized colors
         return colors / 255.0
-    
+
     @cached_property
     def sequential(self) -> mcolors.LinearSegmentedColormap:
         """
