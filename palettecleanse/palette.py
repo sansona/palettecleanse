@@ -19,6 +19,7 @@ try:
     from palettecleanse.utils import PaletteTypes, convert_rgb_palette_to_hex
 
 except ImportError:
+    # runs from pytest
     from .utils import PaletteTypes, convert_rgb_palette_to_hex
 
 np.random.seed(42)  # to keep generated palette consistent
@@ -32,12 +33,10 @@ class Palette:
         Args:
             image_fpath (str/Path): filepath to image
             n_colors (int): number of colors to cluster in clustering algorithm. Default to 5
-
         """
         self.image_fpath = Path(image_fpath)
         self.n_colors = n_colors
         self.image = self.__load_image()
-        self.colors = self.__extract_colors()
 
     def __load_image(self) -> Image:
         """
@@ -48,9 +47,11 @@ class Palette:
         img = img.resize((100, 100))
         return img
 
-    def __extract_colors(self) -> np.ndarray:
+    @cached_property
+    def rgb_values(self) -> np.ndarray:
         """
-        Extract the `n_colors` dominant colors using KMeans clustering
+        Extract the `n_colors` dominant colors using KMeans clustering.
+        Stores normalized rgb values
 
         Returns:
             (np.ndarray): array of normalized extracted colors
@@ -74,7 +75,7 @@ class Palette:
         """
         # sort RGB array by sorting on least significant to most significant
         # https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column/38194077#38194077
-        colors = self.colors[self.colors[:, 2].argsort()]
+        colors = self.rgb_values[self.rgb_values[:, 2].argsort()]
         colors = colors[colors[:, 1].argsort(kind="mergesort")]
         colors = colors[colors[:, 0].argsort(kind="mergesort")]
 
@@ -86,10 +87,10 @@ class Palette:
         Generates a diverging palette
         """
         # find midpoint of colors and split palette into less or greater than midpoint
-        if len(self.colors) >= 2:
-            midpoint = len(self.colors) // 2
+        if len(self.rgb_values) >= 2:
+            midpoint = len(self.rgb_values) // 2
             diverging_colors = np.vstack(
-                (self.colors[0], self.colors[midpoint:], self.colors[-1])
+                (self.rgb_values[0], self.rgb_values[midpoint:], self.rgb_values[-1])
             )
             return mcolors.LinearSegmentedColormap.from_list(
                 "diverging", diverging_colors, N=256
@@ -105,7 +106,7 @@ class Palette:
         Generates a cyclic palette
         """
         # repeat the first color at the end
-        cyclic_colors = np.vstack((self.colors, self.colors[0]))
+        cyclic_colors = np.vstack((self.rgb_values, self.rgb_values[0]))
         return mcolors.LinearSegmentedColormap.from_list("cyclic", cyclic_colors, N=256)
 
     @cached_property
@@ -134,7 +135,7 @@ class Palette:
         Returns:
             (mcolors.ListedColormap): a shuffled array of colors spaced within palette
         """
-        return mcolors.ListedColormap(self.colors, name="qualitative")
+        return mcolors.ListedColormap(self.rgb_values, name="qualitative")
 
     @cached_property
     def plotly(self) -> list:
@@ -145,7 +146,17 @@ class Palette:
             list: list containing converted hex palette
         """
 
-        return convert_rgb_palette_to_hex(list(self.colors))
+        return convert_rgb_palette_to_hex(list(self.rgb_values))
+
+    @cached_property
+    def hex_values(self) -> list:
+        """hex codes generated in self.plotly; separate attribute
+        for ease of access
+
+        Returns:
+            list: list containing converted hex palette
+        """
+        return self.plotly
 
     def display_all_palettes(self) -> None:
         """
@@ -165,7 +176,7 @@ class Palette:
 
         # remember what initiated with in order to reset after
         # iterating through
-        init_colors = self.colors
+        init_colors = self.rgb_values
 
         _, axes = plt.subplots(n_palettes, 1, figsize=(6, 3))
 
@@ -183,7 +194,7 @@ class Palette:
 
         # reset colors to original. This is to avoid the scenario
         # in which displaying all palettes changes the colors var
-        self.colors = init_colors
+        self.rgb_values = init_colors
 
     def display_example_plots(self) -> None:
         """

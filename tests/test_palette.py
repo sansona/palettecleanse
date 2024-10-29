@@ -35,8 +35,8 @@ def test_palette_load_image(palette):
 def test_palette_extract_colors(palette):
     """Tests that palette properly extracts colors out of image based off
     initialization parameters"""
-    assert type(palette.colors) == np.ndarray
-    assert palette.colors.shape == (5, 3)  # 5 for default clusters, 3 for RGB channels
+    assert type(palette.rgb_values) == np.ndarray
+    assert palette.rgb_values.shape == (5, 3)  # 5 for default clusters, 3 for RGB channels
 
 
 def test_palette_attributes(palette):

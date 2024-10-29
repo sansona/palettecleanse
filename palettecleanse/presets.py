@@ -2,7 +2,7 @@
 Collection of predefined color palettes. See `images` folder
 """
 
-import os
+from os import chdir
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -15,10 +15,10 @@ starting_dir = Path.cwd()
 try:
     from palettecleanse.palette import Palette
     from palettecleanse.utils import PaletteTypes
-
-    os.chdir(os.path.join(os.path.dirname(__file__), "../images/"))
-    fpath = Path.cwd()
+    fpath = Path(__file__).parent / "../images"
+    chdir(fpath)
 except ImportError:
+    # runs from pytest
     from .palette import Palette
     from .utils import PaletteTypes
 
@@ -48,7 +48,7 @@ all_presets = {
     Dance: "Dance",
 }
 
-os.chdir(starting_dir)
+chdir(starting_dir)
 
 
 def display_all_preset_palettes(palette_type) -> None:
@@ -57,8 +57,6 @@ def display_all_preset_palettes(palette_type) -> None:
 
     Args:
         palette_type (str): see utils.PaletteTypes
-    Returns:
-        (None)
     """
     available_types = [x.name.lower() for x in PaletteTypes]
     if palette_type not in available_types:
