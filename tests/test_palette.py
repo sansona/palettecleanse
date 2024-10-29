@@ -1,5 +1,6 @@
 """Test suite for palette class & functions in palettecleanse"""
-from colorsys import rgb_to_hsv
+
+from pathlib import Path
 
 import numpy as np
 import PIL
@@ -9,7 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 from ..palettecleanse.palette import *
 from ..palettecleanse.utils import convert_rgb_palette_to_hex, convert_rgb_to_hex
 
-im_fname = "palettecleanse/images/vangogh.jpg"
+im_fpath = Path("palettecleanse/images/vangogh.jpg")
 
 
 @pytest.fixture
@@ -23,7 +24,7 @@ def palette():
     Returns:
         (Palette)
     """
-    return Palette(im_fname)
+    return Palette(im_fpath)
 
 
 def test_palette_load_image(palette):
@@ -43,7 +44,7 @@ def test_palette_attributes(palette):
     don't change after initialization"""
     # these are the base settings that the palette fixture was initialized with
     n_colors = 10
-    more_n_palette = Palette(im_fname, n_colors=n_colors)
+    more_n_palette = Palette(im_fpath, n_colors=n_colors)
     assert len(more_n_palette.qualitative) == n_colors
 
 
@@ -51,7 +52,7 @@ def test_palette_n_colors_attribute(palette):
     """Tests that palette has properly initialized with `n_colors` length qualitative
     palettes"""
     # these are the base settings that the palette fixture was initialized with
-    assert palette.image_fname.endswith("vangogh.jpg")
+    assert palette.image_fpath.name == "vangogh.jpg"
     assert palette.n_colors == 5
 
 

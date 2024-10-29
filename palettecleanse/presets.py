@@ -3,12 +3,13 @@ Collection of predefined color palettes. See `images` folder
 """
 
 import os
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 
-starting_dir = os.getcwd()
+starting_dir = Path.cwd()
 
 # for pytest relative import issue
 try:
@@ -16,23 +17,23 @@ try:
     from palettecleanse.utils import PaletteTypes
 
     os.chdir(os.path.join(os.path.dirname(__file__), "../images/"))
-    fpath = os.getcwd()
+    fpath = Path.cwd()
 except ImportError:
     from .palette import Palette
     from .utils import PaletteTypes
 
-    fpath = "palettecleanse/images"
+    fpath = Path("palettecleanse/images")
 
-Vangogh = Palette(f"{fpath}/vangogh.jpg")
-GreatWave = Palette(f"{fpath}/great_wave.jpg")
-PinkRoses = Palette(f"{fpath}/pink_roses.jpg")
-RedRose = Palette(f"{fpath}/red_roses.jpg")
-TwilightSunset = Palette(f"{fpath}/sunset.jpg")
-BladerunnerOlive = Palette(f"{fpath}/bladerunner_olive.jpg")
-Water = Palette(f"{fpath}/water.jpg")
-Candles = Palette(f"{fpath}/candles.jpg")
-NeighborhoodSucculents = Palette(f"{fpath}/neighborhood_succulents.jpg")
-Dance = Palette(f"{fpath}/dance.jpg")
+Vangogh = Palette(fpath / "vangogh.jpg")
+GreatWave = Palette(fpath / "great_wave.jpg")
+PinkRoses = Palette(fpath / "pink_roses.jpg")
+RedRose = Palette(fpath / "red_roses.jpg")
+TwilightSunset = Palette(fpath / "sunset.jpg")
+BladerunnerOlive = Palette(fpath / "bladerunner_olive.jpg")
+Water = Palette(fpath / "water.jpg")
+Candles = Palette(fpath / "candles.jpg")
+NeighborhoodSucculents = Palette(fpath / "neighborhood_succulents.jpg")
+Dance = Palette(fpath / "dance.jpg")
 
 all_presets = {
     Vangogh: "Vangogh",

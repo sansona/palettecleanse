@@ -3,6 +3,7 @@ Palette class
 """
 
 from functools import cached_property
+from pathlib import Path
 
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
@@ -24,18 +25,16 @@ np.random.seed(42)  # to keep generated palette consistent
 
 
 class Palette:
-    def __init__(self, image_fname: str, n_colors: int = 5) -> None:
+    def __init__(self, image_fpath: str, n_colors: int = 5) -> None:
         """
         Initialize the Palette object with an image, palette type, and number of colors
 
         Args:
-            image_fname (str): filename to image
+            image_fpath (str/Path): filepath to image
             n_colors (int): number of colors to cluster in clustering algorithm. Default to 5
 
-        Returns:
-            (None)
         """
-        self.image_fname = image_fname
+        self.image_fpath = Path(image_fpath)
         self.n_colors = n_colors
         self.image = self.__load_image()
         self.colors = self.__extract_colors()
@@ -43,15 +42,9 @@ class Palette:
     def __load_image(self) -> Image:
         """
         Load the image, convert to RGB, and compress image.
-        Compression primarily helps with clustering later on - large image
-            files will still have a delay
-
-        Args:
-            (None)
-        Returns:
-            (Image)
+        Compression primarily helps with clustering later on - large image files will still have a delay
         """
-        img = Image.open(self.image_fname).convert("RGB")
+        img = Image.open(self.image_fpath).convert("RGB")
         img = img.resize((100, 100))
         return img
 
@@ -59,8 +52,6 @@ class Palette:
         """
         Extract the `n_colors` dominant colors using KMeans clustering
 
-        Args:
-            (None)
         Returns:
             (np.ndarray): array of normalized extracted colors
         """
@@ -80,11 +71,6 @@ class Palette:
     def sequential(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a sequential palette
-
-        Args:
-            (None)
-        Returns:
-            (mcolors.LinearSegmentedColormap)
         """
         # sort RGB array by sorting on least significant to most significant
         # https://stackoverflow.com/questions/2828059/sorting-arrays-in-numpy-by-column/38194077#38194077
@@ -98,11 +84,6 @@ class Palette:
     def diverging(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a diverging palette
-
-        Args:
-            (None)
-        Returns:
-            (mcolors.LinearSegmentedColorMap)
         """
         # find midpoint of colors and split palette into less or greater than midpoint
         if len(self.colors) >= 2:
@@ -122,11 +103,6 @@ class Palette:
     def cyclic(self) -> mcolors.LinearSegmentedColormap:
         """
         Generates a cyclic palette
-
-        Args:
-            (None)
-        Returns:
-            (mcolors.LinearSegmentedColormap)
         """
         # repeat the first color at the end
         cyclic_colors = np.vstack((self.colors, self.colors[0]))
@@ -140,8 +116,6 @@ class Palette:
         Some plotting libraries utilize a raw array of colors as opposed
         to a mcolors object for qualitative palettes
 
-        Args:
-            (None)
         Returns:
             (np.ndarray): a shuffled array of colors spaced within palette
         """
@@ -157,8 +131,6 @@ class Palette:
         Note - the `qualitative` method is likely preferred
         for certain plotting libraries
 
-        Args:
-            (None)
         Returns:
             (mcolors.ListedColormap): a shuffled array of colors spaced within palette
         """
@@ -169,9 +141,6 @@ class Palette:
         """
         Converts colors array to a hex sorted list for plotting in `plotly` library
 
-        Args:
-            (None)
-
         Returns:
             list: list containing converted hex palette
         """
@@ -181,11 +150,6 @@ class Palette:
     def display_all_palettes(self) -> None:
         """
         Displays all possible palette options
-
-        Args:
-            (None)
-        Returns:
-            (None)
         """
         palette_names = [x.name.lower() for x in PaletteTypes]
 
@@ -229,15 +193,10 @@ class Palette:
 
         This function follows bad code practice but given size of
         library, opted to keep all as single function instead of dispersing
-
-        Args:
-            (None)
-        Returns:
-            (None)
         """
         fig, axes = plt.subplots(nrows=2, ncols=4, figsize=(20, 6))
 
-        axes[0, 0].imshow(plt.imread(self.image_fname))
+        axes[0, 0].imshow(plt.imread(self.image_fpath))
         axes[0, 0].set_title("Image")
 
         # scatter plot
@@ -335,12 +294,7 @@ class Palette:
         Applies palette to selection of preprogrammed plots for ease of data
         visualization. Generates plots using Plotly instead of matplotlib/seaborn
 
-        Plotly handles things like ordering and the raw values differently than matplotlib/seaborn do, so plots will not come out perfectly identical
-
-        Args:
-            (None)
-        Returns:
-            (None)
+        Plotly handles things like ordering and the raw values differently than matplotlib/seaborn do, so plots will not come out identical
         """
         fig = subplots.make_subplots(
             rows=2,
@@ -358,7 +312,7 @@ class Palette:
         )
 
         # image
-        img = go.Image(z=plt.imread(self.image_fname))
+        img = go.Image(z=plt.imread(self.image_fpath))
         fig.add_trace(img, row=1, col=1)
 
         # scatter plot
