@@ -1,5 +1,5 @@
 # palettecleanse
-`palettecleanse` is a python library for quick conversions of images to custom color palettes
+`palettecleanse` is a python library for quick conversions of images to custom color palettes. A web app version can be found [here](https://palettecleanse.pythonanywhere.com/)
 
  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
  
@@ -19,7 +19,7 @@ TwilightSunset.display_plotly_examples()
 ## Quickstart
 To convert an image to a custom color palette, simply select an image and load it into `palettecleanse` as a `Palette` object, where desired attributes such as the number of colors (`n_colors`) can be specified as part of the class initialization. All available palettes for the image can be displayed via. the `display_all_palettes` method.
 ```py
-from palettecleanse.palettes import Palette
+from palettecleanse.palette import Palette
 
 # load image
 vangogh = Palette('images/vangogh.jpg')
